@@ -30,7 +30,6 @@ namespace Ex::OpenAddressing {
             }
 
             uint32_t hash_result = murmurHash(key, seed);
-//            murmurHash3_x86_32(key.c_str(), (uint32_t) key.length(), seed, &hash_result);
             auto position = hash_result % capacity;
 
             auto i = position;
@@ -65,7 +64,6 @@ namespace Ex::OpenAddressing {
             }
 
             uint32_t hash_result = murmurHash(key, seed);
-//            murmurHash3_x86_32(key.c_str(), (uint32_t) key.length(), seed, &hash_result);
             auto position = hash_result % size;
 
             auto up = position;
@@ -98,7 +96,6 @@ namespace Ex::OpenAddressing {
             }
 
             uint32_t hash_result = murmurHash(key, seed);
-//            murmurHash3_x86_32(key.c_str(), (uint32_t) key.length(), seed, &hash_result);
             auto position = hash_result % capacity;
 
             auto up = position;
