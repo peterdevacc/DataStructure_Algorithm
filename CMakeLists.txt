@@ -7,6 +7,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/array)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/list)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stack)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/queue)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/heap)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/hash)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tree)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/graph)
@@ -26,6 +27,7 @@ target_link_libraries(
         list
         stack
         queue
+        heap
         hash
         tree
         graph

@@ -18,13 +18,21 @@
 
 ### queue 队列
 
-- queue (array implementation)
-- queue (linked list implementation)
+- queue
+  - array implementation
+  - linked list implementation
 
 ### stack 栈
 
-- stack (array implementation)
-- stack (linked list implementation)
+- stack
+  - array implementation
+  - linked list implementation
+
+### heap 堆
+
+- binary max heap
+  - array implementation
+  - linked list implementation
 
 ### tree 树
 
@@ -34,8 +42,9 @@
 
 ### hash 哈希
 
-- hash table (closed addressing)
-- hash table (open addressing)
+- hash table
+  - closed addressing
+  - open addressing
 
 ### graph 图
 
