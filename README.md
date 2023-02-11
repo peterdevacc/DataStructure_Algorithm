@@ -77,3 +77,7 @@
 - radix sort
 - select sort
 - shell sort
+
+## License
+
+Data Structure and Algorithm is distributed under the terms of the GNU GENERAL PUBLIC LICENSE (Version 3). See [LICENSE](LICENSE) for details.
