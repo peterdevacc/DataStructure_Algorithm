@@ -9,7 +9,7 @@
 
 #include "ex_linked_list_impl_queue.h"
 
-void Ex::LinkedListImpl::ex_linked_list_impl_queue_test() {
+void Ex::LinkedListImpl::queue_test() {
     Queue<int> qi{};
     for (int i = 0; i < 10; ++i) {
         qi.enqueue(i);

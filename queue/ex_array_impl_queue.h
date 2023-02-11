@@ -78,7 +78,7 @@ namespace Ex::ArrayImpl {
         unsigned long capacity;
     };
 
-    void ex_array_impl_queue_list();
+    void queue_test();
 
 }
 

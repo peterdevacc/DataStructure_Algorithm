@@ -9,7 +9,7 @@
 
 #include "ex_array_impl_queue.h"
 
-void Ex::ArrayImpl::ex_array_impl_queue_list() {
+void Ex::ArrayImpl::queue_test() {
     Queue<int> qi{10};
     assert(qi.get_capacity() == 10);
     for (int i = 0; i < 10; ++i) {

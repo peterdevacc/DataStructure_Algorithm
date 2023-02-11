@@ -11,6 +11,6 @@
 #include "ex_linked_list_impl_queue.h"
 
 void Ex::test_queue() {
-    ArrayImpl::ex_array_impl_queue_list();
-    LinkedListImpl::ex_linked_list_impl_queue_test();
+    ArrayImpl::queue_test();
+    LinkedListImpl::queue_test();
 }

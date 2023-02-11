@@ -81,7 +81,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_linked_list_impl_queue_test();
+    void queue_test();
 
 }
 
