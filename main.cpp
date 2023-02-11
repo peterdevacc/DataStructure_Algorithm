@@ -1,6 +1,6 @@
 // /*
 //  * Copyright 2018-2023 洪振健.
-//  * Use of this source code is governed by the GNU general public license that can be found in the LICENSE file.
+//  * Use of this source code is governed by the GNU GENERAL PUBLIC LICENSE Version 3 that can be found in the LICENSE file.
 //  *
 
 #include "array/core_array.h"
