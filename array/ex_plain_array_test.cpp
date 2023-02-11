@@ -7,10 +7,10 @@
 // Created by Peter on 2022/4/14.
 //
 
-#include "ex_array.h"
+#include "ex_plain_array.h"
 
-void Ex::ArrayImpl::ex_array_test() {
-    Array<int> list{};
+void Ex::ArrayImpl::plain_array_test() {
+    PlainArray<int> list{};
 
     assert(list.get_capacity() == 3);
     list.insert(5);

@@ -7,22 +7,22 @@
 // Created by Peter on 2022/4/14.
 //
 
-#ifndef EX_ARRAY_H
-#define EX_ARRAY_H
+#ifndef EX_PLAIN_ARRAY_H
+#define EX_PLAIN_ARRAY_H
 
 #include "core_array.h"
 
 namespace Ex::ArrayImpl {
 
     template<typename T>
-    class Array {
+    class PlainArray {
     public:
-        explicit Array(unsigned long capacity = 3, unsigned long increment = 3)
+        explicit PlainArray(unsigned long capacity = 3, unsigned long increment = 3)
                 : capacity(capacity), size(0), increment(increment) {
             data = new std::optional<T>[capacity];
         }
 
-        ~Array() {
+        ~PlainArray() {
             delete[]data;
         }
 
@@ -98,8 +98,8 @@ namespace Ex::ArrayImpl {
         unsigned long increment;
     };
 
-    void ex_array_test();
+    void plain_array_test();
 
 }
 
-#endif //EX_ARRAY_H
+#endif //EX_PLAIN_ARRAY_H
