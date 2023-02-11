@@ -9,7 +9,7 @@
 
 #include "ex_array_impl_stack.h"
 
-void Ex::ArrayImpl::ex_array_impl_stack_test() {
+void Ex::ArrayImpl::stack_test() {
     Stack<int> si{8};
     for (int i = 0; i < 8; ++i) {
         si.push(i);

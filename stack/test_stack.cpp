@@ -11,6 +11,6 @@
 #include "ex_linked_list_impl_stack.h"
 
 void Ex::test_stack() {
-    ArrayImpl::ex_array_impl_stack_test();
-    LinkedListImpl::ex_linked_list_impl_stack_test();
+    ArrayImpl::stack_test();
+    LinkedListImpl::stack_test();
 }

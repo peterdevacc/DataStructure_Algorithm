@@ -67,7 +67,7 @@ namespace Ex::ArrayImpl {
         unsigned long capacity;
     };
 
-    void ex_array_impl_stack_test();
+    void stack_test();
 
 }
 

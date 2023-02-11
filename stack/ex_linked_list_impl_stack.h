@@ -96,7 +96,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_linked_list_impl_stack_test();
+    void stack_test();
 
 }
 

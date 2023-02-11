@@ -9,7 +9,7 @@
 
 #include "ex_linked_list_impl_stack.h"
 
-void Ex::LinkedListImpl::ex_linked_list_impl_stack_test() {
+void Ex::LinkedListImpl::stack_test() {
     Stack<int> si{};
     si.push(8);
     si.push(5);
