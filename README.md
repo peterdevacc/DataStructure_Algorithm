@@ -8,7 +8,7 @@
 
 ### array 数组
 
-- plain array
+- vector
 
 ### list 列表
 

@@ -7,8 +7,8 @@
 // Created by Peter on 2022/4/14.
 //
 
-#include "ex_plain_array.h"
+#include "ex_vector.h"
 
 void Ex::test_array() {
-    ArrayImpl::plain_array_test();
+    ArrayImpl::vector_test();
 }

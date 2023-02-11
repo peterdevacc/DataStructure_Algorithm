@@ -15,14 +15,14 @@
 namespace Ex::ArrayImpl {
 
     template<typename T>
-    class PlainArray {
+    class Vector {
     public:
-        explicit PlainArray(unsigned long capacity = 3, unsigned long increment = 3)
+        explicit Vector(unsigned long capacity = 3, unsigned long increment = 3)
                 : capacity(capacity), size(0), increment(increment) {
             data = new std::optional<T>[capacity];
         }
 
-        ~PlainArray() {
+        ~Vector() {
             delete[]data;
         }
 
@@ -98,7 +98,7 @@ namespace Ex::ArrayImpl {
         unsigned long increment;
     };
 
-    void plain_array_test();
+    void vector_test();
 
 }
 
