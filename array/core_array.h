@@ -12,6 +12,11 @@
 
 #include <optional>
 #include <cassert>
+#include <string>
+#include <shared_mutex>
+#include <thread>
+#include <functional>
+#include <vector>
 
 namespace Ex {
 

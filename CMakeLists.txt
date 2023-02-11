@@ -3,6 +3,9 @@ project(DataStructure_Algorithm)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/array)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/list)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stack)
@@ -22,14 +25,17 @@ file(
 add_executable(DataStructure_Algorithm ${SOURCES})
 
 target_link_libraries(
-        DataStructure_Algorithm PUBLIC
-        array
-        list
-        stack
-        queue
-        heap
-        hash
-        tree
-        graph
-        sort
+        DataStructure_Algorithm
+        PUBLIC
+            array
+            list
+            stack
+            queue
+            heap
+            hash
+            tree
+            graph
+            sort
+        PRIVATE
+            Threads::Threads
 )

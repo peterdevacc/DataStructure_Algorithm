@@ -17,7 +17,7 @@ namespace Ex::ArrayImpl {
     template<typename T>
     class Vector {
     public:
-        explicit Vector(unsigned long capacity = 3, unsigned long increment = 3)
+        explicit Vector(unsigned long capacity = 3, unsigned long increment = 2)
                 : capacity(capacity), size(0), increment(increment) {
             data = new std::optional<T>[capacity];
         }
@@ -26,29 +26,26 @@ namespace Ex::ArrayImpl {
             delete[]data;
         }
 
-        int insert(T value) {
+        void insert(T value) {
+            std::unique_lock lock(readWriteLock);
+
             if (size == capacity) {
-                auto l = new std::optional<T>[capacity + increment];
+                auto l = new std::optional<T>[capacity * increment];
                 for (int i = 0; i < capacity; ++i) {
                     l[i] = data[i];
                 }
-                capacity += increment;
+                capacity *= increment;
                 delete[]data;
                 data = l;
-                increment *= 2;
             }
 
-            for (int i = 0; i < capacity; ++i) {
-                if (!data[i].has_value()) {
-                    data[i] = value;
-                    size += 1;
-                    return 1;
-                }
-            }
-            return -1;
+            data[size] = value;
+            size++;
         }
 
         void remove(T value) {
+            std::unique_lock lock(readWriteLock);
+
             for (int i = 0; i < capacity; ++i) {
                 if (data[i] == value) {
                     data[i].reset();
@@ -59,6 +56,8 @@ namespace Ex::ArrayImpl {
         }
 
         void remove_all() {
+            std::unique_lock lock(readWriteLock);
+
             for (int i = 0; i < capacity; ++i) {
                 if (data[i].has_value()) {
                     data[i].reset();
@@ -68,6 +67,8 @@ namespace Ex::ArrayImpl {
         }
 
         auto at(unsigned long position) {
+            std::unique_lock lock(readWriteLock);
+
             if (position >= 0 && position < size) {
                 return data[position];
             } else {
@@ -80,15 +81,77 @@ namespace Ex::ArrayImpl {
         }
 
         auto get_size() {
+            std::unique_lock lock(readWriteLock);
+
             return size;
         }
 
         auto get_capacity() {
+            std::unique_lock lock(readWriteLock);
+
             return capacity;
         }
 
         auto is_empty() {
+            std::unique_lock lock(readWriteLock);
+
             return size == 0;
+        }
+
+        struct iterator {
+
+            explicit iterator(std::optional<T> *data) : current(data) {}
+
+            std::optional<T>& operator*() const {
+                return *current;
+            }
+
+            std::optional<T>* operator->() const {
+                return current;
+            }
+
+            bool operator==(const iterator& other) const {
+                return this->current == other.current;
+            }
+
+            bool operator!=(const iterator& other) const {
+                return this->current != other.current;
+            }
+
+            iterator& operator++() {
+                current++;
+                return *this;
+            }
+
+            iterator operator++(int) {
+                iterator tmp = *this;
+                ++(*this);
+                return tmp;
+            }
+
+            iterator& operator+=(int i) {
+                current += i;
+                return *this;
+            }
+
+            std::optional<T>& operator[](std::ptrdiff_t position) const {
+                return current[position];
+            }
+
+        private:
+            std::optional<T> *current;
+        };
+
+        iterator begin() {
+            std::unique_lock lock(readWriteLock);
+
+            return iterator(data);
+        }
+
+        iterator end() {
+            std::unique_lock lock(readWriteLock);
+
+            return iterator(data + size);
         }
 
     private:
@@ -96,6 +159,8 @@ namespace Ex::ArrayImpl {
         unsigned long capacity;
         unsigned long size;
         unsigned long increment;
+
+        mutable std::shared_mutex readWriteLock;
     };
 
     void vector_test();

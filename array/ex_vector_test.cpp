@@ -9,7 +9,17 @@
 
 #include "ex_vector.h"
 
+using namespace Ex::ArrayImpl;
+
+void vector_single_thread_test();
+void vector_multi_thread_test();
+
 void Ex::ArrayImpl::vector_test() {
+    vector_single_thread_test();
+    vector_multi_thread_test();
+}
+
+void vector_single_thread_test() {
     Vector<int> vector{};
 
     assert(vector.get_capacity() == 3);
@@ -23,10 +33,19 @@ void Ex::ArrayImpl::vector_test() {
     vector.insert(6);
     assert(vector.get_capacity() == 12);
     vector.insert(7);
-    assert(vector.get_size() == 8);
 
     assert(vector.at(3) == 1);
     assert(vector[3] == 1);
+
+    std::vector<std::optional<int>> expectedVector{
+        5, 3, 2, 1, 4, 9, 6, 7
+    };
+    assert(vector.get_size() == expectedVector.size());
+    auto i = 0;
+    std::for_each(vector.begin(), vector.end(), [&](const auto num){
+        assert(num.value() == expectedVector[i].value());
+        i += 1;
+    });
 
     vector.remove(1);
     vector.remove(7);
@@ -50,4 +69,23 @@ void Ex::ArrayImpl::vector_test() {
     vector.remove_all();
     assert(vector.get_size() == 0);
     assert(vector.is_empty());
+}
+
+void vector_multi_thread_test() {
+    Vector<std::string> vector{};
+
+    auto vectorInsert = [&vector]() {
+        for (int i = 0; i < 3; i++) {
+            auto id = std::hash<std::thread::id>{}(std::this_thread::get_id());
+            vector.insert(std::to_string(id) + "-num-" + std::to_string(i));
+        }
+    };
+
+    std::thread threadA(vectorInsert);
+    std::thread threadB(vectorInsert);
+
+    threadA.join();
+    threadB.join();
+
+    assert(vector.get_size() == 6);
 }
