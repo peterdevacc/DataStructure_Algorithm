@@ -1,3 +1,8 @@
+// /*
+//  * Copyright 2018-2023 洪振健.
+//  * Use of this source code is governed by the GNU general public license that can be found in the LICENSE file.
+//  *
+
 #include "array/core_array.h"
 #include "list/core_list.h"
 #include "queue/core_queue.h"
