@@ -9,7 +9,7 @@
 
 #include "ex_sorted_linked_list.h"
 
-void Ex::LinkedListImpl::ex_sorted_linked_list_test() {
+void Ex::LinkedListImpl::sorted_linked_list_test() {
     SortedLinkedList<int> list{};
     list.insert(1);
     list.insert(3);

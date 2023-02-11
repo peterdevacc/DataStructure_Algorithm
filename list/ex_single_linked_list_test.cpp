@@ -9,7 +9,7 @@
 
 #include "ex_single_linked_list.h"
 
-void Ex::LinkedListImpl::ex_single_linked_list_test() {
+void Ex::LinkedListImpl::single_linked_list_test() {
     SingleLinkedList<int> list{};
     list.insert(3);
     list.insert(5);

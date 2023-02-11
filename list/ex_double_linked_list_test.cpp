@@ -9,7 +9,7 @@
 
 #include "ex_double_linked_list.h"
 
-void Ex::LinkedListImpl::ex_double_linked_list_test() {
+void Ex::LinkedListImpl::double_linked_list_test() {
     DoubleLinkedList<int> list{};
     list.insert(3);
     list.insert(5);

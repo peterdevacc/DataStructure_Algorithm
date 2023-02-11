@@ -164,7 +164,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_sorted_linked_list_test();
+    void sorted_linked_list_test();
 
 }
 

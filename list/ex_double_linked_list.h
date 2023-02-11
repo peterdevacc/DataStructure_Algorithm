@@ -208,7 +208,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_double_linked_list_test();
+    void double_linked_list_test();
 
 }
 

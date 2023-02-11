@@ -12,7 +12,7 @@
 #include "ex_sorted_linked_list.h"
 
 void Ex::test_list() {
-    LinkedListImpl::ex_single_linked_list_test();
-    LinkedListImpl::ex_double_linked_list_test();
-    LinkedListImpl::ex_sorted_linked_list_test();
+    LinkedListImpl::single_linked_list_test();
+    LinkedListImpl::double_linked_list_test();
+    LinkedListImpl::sorted_linked_list_test();
 }
