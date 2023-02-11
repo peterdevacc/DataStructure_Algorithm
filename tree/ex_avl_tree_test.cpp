@@ -15,7 +15,7 @@ void avl_tree_right_rotation_test();
 void avl_tree_left_right_rotation_test();
 void avl_tree_right_left_rotation_test();
 
-void Ex::LinkedListImpl::ex_avl_tree_test() {
+void Ex::LinkedListImpl::avl_tree_test() {
     avl_tree_common_test();
     avl_tree_left_rotation_test();
     avl_tree_right_rotation_test();

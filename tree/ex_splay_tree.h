@@ -230,7 +230,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_splay_tree_test();
+    void splay_tree_test();
 
 }
 

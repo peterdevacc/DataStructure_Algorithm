@@ -286,7 +286,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_avl_tree_test();
+    void avl_tree_test();
 
 }
 

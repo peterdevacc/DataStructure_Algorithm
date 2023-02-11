@@ -182,7 +182,7 @@ namespace Ex::LinkedListImpl {
         unsigned long size;
     };
 
-    void ex_binary_search_tree_test();
+    void binary_search_tree_test();
 
 }
 

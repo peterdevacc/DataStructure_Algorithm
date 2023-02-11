@@ -17,7 +17,7 @@ void splay_tree_zig_zig_right_test();
 void splay_tree_zig_zag_left_test();
 void splay_tree_zig_zag_right_test();
 
-void Ex::LinkedListImpl::ex_splay_tree_test() {
+void Ex::LinkedListImpl::splay_tree_test() {
     splay_tree_common_test();
     splay_tree_zig_left_test();
     splay_tree_zig_right_test();

@@ -12,7 +12,7 @@
 #include "ex_splay_tree.h"
 
 void Ex::test_tree() {
-    LinkedListImpl::ex_avl_tree_test();
-    LinkedListImpl::ex_binary_search_tree_test();
-    LinkedListImpl::ex_splay_tree_test();
+    LinkedListImpl::avl_tree_test();
+    LinkedListImpl::binary_search_tree_test();
+    LinkedListImpl::splay_tree_test();
 }

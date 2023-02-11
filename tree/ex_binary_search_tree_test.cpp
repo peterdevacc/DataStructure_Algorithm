@@ -13,7 +13,7 @@ void binary_search_tree_common_test();
 void binary_search_tree_insert_test();
 void binary_search_tree_delete_test();
 
-void Ex::LinkedListImpl::ex_binary_search_tree_test() {
+void Ex::LinkedListImpl::binary_search_tree_test() {
     binary_search_tree_common_test();
     binary_search_tree_insert_test();
     binary_search_tree_delete_test();
