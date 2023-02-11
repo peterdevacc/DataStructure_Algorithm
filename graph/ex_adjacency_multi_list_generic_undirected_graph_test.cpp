@@ -11,13 +11,12 @@
 
 using namespace Ex::AdjacencyMultiList;
 
-void ex_adjacency_multi_list_generic_undirected_graph_unweighted();
+void adjacency_multi_list_generic_undirected_graph_unweighted();
+void adjacency_multi_list_generic_undirected_graph_weighted();
 
-void ex_adjacency_multi_list_generic_undirected_graph_weighted();
-
-void Ex::AdjacencyMultiList::ex_adjacency_multi_list_generic_undirected_graph_test() {
-    ex_adjacency_multi_list_generic_undirected_graph_unweighted();
-    ex_adjacency_multi_list_generic_undirected_graph_weighted();
+void Ex::AdjacencyMultiList::generic_undirected_graph_test() {
+    adjacency_multi_list_generic_undirected_graph_unweighted();
+    adjacency_multi_list_generic_undirected_graph_weighted();
 }
 
 void ex_adjacency_multi_list_generic_undirected_graph_remove_vertex_test() {
@@ -48,16 +47,16 @@ void ex_adjacency_multi_list_generic_undirected_graph_remove_vertex_test() {
     assert(n1[1] == n4[0]);
 
     assert(n1.size() == 2);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n1[0], n0[1], n4[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n1[1], nullptr, nullptr);
+    undirected_check_edge_field<std::string>(n1[0], n0[1], n4[0]);
+    undirected_check_edge_field<std::string>(n1[1], nullptr, nullptr);
 
     assert(n2.empty());
 
     assert(n3.size() == 1);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n3[0], nullptr, nullptr);
+    undirected_check_edge_field<std::string>(n3[0], nullptr, nullptr);
 
     assert(n4.size() == 1);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n4[0], nullptr, nullptr);
+    undirected_check_edge_field<std::string>(n4[0], nullptr, nullptr);
 
     graph.remove_vertex(1);
     assert(graph.get_vertexNum() == 3);
@@ -74,7 +73,7 @@ void ex_adjacency_multi_list_generic_undirected_graph_remove_vertex_test() {
     assert(n4.empty());
 
     assert(n0[0] == n3[0]);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[0], "D", 3);
+    undirected_check_edge_data<std::string>(n0[0], "D", 3);
 
     graph.insert_vertex(25, "Z");
     assert(graph.is_vertex_exist(25));
@@ -83,7 +82,7 @@ void ex_adjacency_multi_list_generic_undirected_graph_remove_vertex_test() {
     assert(graph.vertex_position(24) == 2);
 }
 
-void ex_adjacency_multi_list_generic_undirected_graph_unweighted() {
+void adjacency_multi_list_generic_undirected_graph_unweighted() {
     GenericUndirectedGraph<std::string> graph{8};
     assert(graph.get_vertexMaxNum() == 8);
 
@@ -124,42 +123,42 @@ void ex_adjacency_multi_list_generic_undirected_graph_unweighted() {
     assert(n0.size() == 2);
     assert(n0[0] == n1[0]);
     assert(n0[1] == n3[0]);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[0], "B", 2);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[1], "D", 3);
-    adjacencyMultiListUnDirectedCheckEdgeField(n0[0], n0[1], n2[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n0[1], nullptr, n2[1]);
+    undirected_check_edge_data<std::string>(n0[0], "B", 2);
+    undirected_check_edge_data<std::string>(n0[1], "D", 3);
+    undirected_check_edge_field(n0[0], n0[1], n2[0]);
+    undirected_check_edge_field<std::string>(n0[1], nullptr, n2[1]);
 
     assert(n1.size() == 3);
     assert(n1[0] == n0[0]);
     assert(n1[1] == n2[0]);
     assert(n1[2] == n4[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField(n1[0], n0[1], n2[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField(n1[1], n2[1], n4[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n1[2], n4[1], nullptr);
+    undirected_check_edge_field(n1[0], n0[1], n2[0]);
+    undirected_check_edge_field(n1[1], n2[1], n4[0]);
+    undirected_check_edge_field<std::string>(n1[2], n4[1], nullptr);
 
     assert(n2.size() == 3);
     assert(n2[0] == n1[1]);
     assert(n2[1] == n3[1]);
     assert(n2[2] == n4[1]);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[0], "B", 2);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[1], "D", 3);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[2], "E", 4);
-    adjacencyMultiListUnDirectedCheckEdgeField(n2[0], n2[1], n4[0]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n2[1], n2[2], nullptr);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n2[2], nullptr, nullptr);
+    undirected_check_edge_data<std::string>(n2[0], "B", 2);
+    undirected_check_edge_data<std::string>(n2[1], "D", 3);
+    undirected_check_edge_data<std::string>(n2[2], "E", 4);
+    undirected_check_edge_field(n2[0], n2[1], n4[0]);
+    undirected_check_edge_field<std::string>(n2[1], n2[2], nullptr);
+    undirected_check_edge_field<std::string>(n2[2], nullptr, nullptr);
 
     assert(n3.size() == 2);
     assert(n3[0] == n0[1]);
     assert(n3[1] == n2[1]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n3[0], nullptr, n2[1]);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n3[1], n4[1], nullptr);
+    undirected_check_edge_field<std::string>(n3[0], nullptr, n2[1]);
+    undirected_check_edge_field<std::string>(n3[1], n4[1], nullptr);
 
     assert(n4.size() == 2);
     assert(n4[0] == n1[2]);
     assert(n4[1] == n2[2]);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n4[0], "B", 2);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n4[0], n2[2], nullptr);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n4[1], nullptr, nullptr);
+    undirected_check_edge_data<std::string>(n4[0], "B", 2);
+    undirected_check_edge_field<std::string>(n4[0], n2[2], nullptr);
+    undirected_check_edge_field<std::string>(n4[1], nullptr, nullptr);
 
     ex_adjacency_multi_list_generic_undirected_graph_remove_vertex_test();
 
@@ -171,8 +170,8 @@ void ex_adjacency_multi_list_generic_undirected_graph_unweighted() {
     n2 = graph.vertex_neighbors(2);
 
     assert(n0.size() == 1);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[0], "D", 3);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n0[0], nullptr, n2[1]);
+    undirected_check_edge_data<std::string>(n0[0], "D", 3);
+    undirected_check_edge_field<std::string>(n0[0], nullptr, n2[1]);
 
     assert(n1.size() == 2);
     assert(n1[0] == n2[0]);
@@ -184,13 +183,13 @@ void ex_adjacency_multi_list_generic_undirected_graph_unweighted() {
     n4 = graph.vertex_neighbors(4);
 
     assert(n2.size() == 2);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n2[1], nullptr, nullptr);
+    undirected_check_edge_field<std::string>(n2[1], nullptr, nullptr);
 
     assert(n4.size() == 1);
-    adjacencyMultiListUnDirectedCheckEdgeField<std::string>(n4[0], nullptr, nullptr);
+    undirected_check_edge_field<std::string>(n4[0], nullptr, nullptr);
 }
 
-void ex_adjacency_multi_list_generic_undirected_graph_weighted() {
+void adjacency_multi_list_generic_undirected_graph_weighted() {
     GenericUndirectedGraph<std::string> graph{8};
     graph.insert_vertex(2, "C");
     graph.insert_vertex(0, "A");
@@ -211,12 +210,12 @@ void ex_adjacency_multi_list_generic_undirected_graph_weighted() {
     auto n3 = graph.vertex_neighbors(3);
     auto n4 = graph.vertex_neighbors(4);
 
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[0], "B", 2, 1);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n0[1], "D", 3, 1);
+    undirected_check_edge_data<std::string>(n0[0], "B", 2, 1);
+    undirected_check_edge_data<std::string>(n0[1], "D", 3, 1);
 
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[0], "B", 2, 2);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[1], "D", 3, 2);
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n2[2], "E", 4, 3);
+    undirected_check_edge_data<std::string>(n2[0], "B", 2, 2);
+    undirected_check_edge_data<std::string>(n2[1], "D", 3, 2);
+    undirected_check_edge_data<std::string>(n2[2], "E", 4, 3);
 
-    adjacencyMultiListUnDirectedCheckEdgeData<std::string>(n4[0], "B", 2, 5);
+    undirected_check_edge_data<std::string>(n4[0], "B", 2, 5);
 }

@@ -35,14 +35,14 @@ namespace Ex {
             std::optional<T> data;
         };
 
-        void adjacencyListCheckVertex(
+        void check_vertex(
             Vertex *vertex,
             unsigned long num,
             unsigned long weight = 1
         );
 
         template<typename T>
-        void adjacencyListCheckVertex(
+        void check_vertex(
             GenericVertex<T> *vertex,
             long num, T data,
             unsigned long weight = 1
@@ -63,14 +63,14 @@ namespace Ex {
             std::optional<T> data;
         };
 
-        void adjacencyMatrixCheckVertex(
+        void check_vertex(
             std::pair<unsigned long, unsigned long> vertex, 
             unsigned long data, 
             unsigned long weight = 1
         );
 
         template<typename T>
-        void adjacencyMatrixCheckVertex(
+        void check_vertex(
             GenericVertex<T> vertex,
             unsigned long num,
             T data,
@@ -114,14 +114,14 @@ namespace Ex {
             std::optional<T> data;
         };
 
-        void adjacencyMultiListUnDirectedCheckEdgeData(
+        void undirected_check_edge_data(
             Edge *edge,
             unsigned long position,
             unsigned long weight = 1
         );
 
         template<typename T>
-        void adjacencyMultiListUnDirectedCheckEdgeData(
+        void undirected_check_edge_data(
             GenericEdge<T> *edge,
             T data,
             unsigned long position,
@@ -132,14 +132,14 @@ namespace Ex {
             assert(edge->tailVertexPosition == position);
         }
 
-        void adjacencyMultiListUnDirectedCheckEdgeField(
+        void undirected_check_edge_field(
             Edge *edge,
             Edge *headRelatedNext,
             Edge *tailRelatedNext
         );
 
         template<typename T>
-        void adjacencyMultiListUnDirectedCheckEdgeField(
+        void undirected_check_edge_field(
             GenericEdge<T> *edge,
             GenericEdge<T> *headRelatedNext,
             GenericEdge<T> *tailRelatedNext
@@ -186,14 +186,14 @@ namespace Ex {
             std::optional<T> data;
         };
 
-        void orthogonalListDirectedCheckVertexField(
+        void directed_check_vertex_field(
             std::optional<Vertex> vertex,
             Edge *in,
             Edge *out
         );
 
         template<typename T>
-        void orthogonalListDirectedCheckVertexField(
+        void directed_check_vertex_field(
             GenericVertex<T> *vertex,
             GenericEdge<T> *in,
             GenericEdge<T> *out
@@ -202,14 +202,14 @@ namespace Ex {
             assert(vertex->firstOut == out);
         }
 
-        void orthogonalListDirectedCheckEdgeField(
+        void directed_check_edge_field(
             Edge *edge,
             Edge *nextHead,
             Edge *nextTail
         );
 
         template<typename T>
-        void orthogonalListDirectedCheckEdgeField(
+        void directed_check_edge_field(
             GenericEdge<T> *neighbor,
             GenericEdge<T> *hfp, GenericEdge<T> *hfn,
             GenericEdge<T> *tfp, GenericEdge<T> *tfn
@@ -220,14 +220,14 @@ namespace Ex {
             assert(neighbor->tailFieldNext == tfn);
         }
 
-        void orthogonalListDirectedCheckEdgeData(
+        void directed_check_edge_data(
             Edge *neighbor,
             unsigned long num,
             unsigned long weight = 1
         );
 
         template<typename T>
-        void orthogonalListDirectedCheckEdgeData(
+        void directed_check_edge_data(
             GenericEdge<T> *neighbor,
             unsigned long num,
             T data,

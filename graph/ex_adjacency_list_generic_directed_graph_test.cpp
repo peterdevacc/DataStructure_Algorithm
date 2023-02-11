@@ -11,16 +11,15 @@
 
 using namespace Ex::AdjacencyList;
 
-void ex_adjacency_list_generic_directed_graph_unweighted();
+void adjacency_list_generic_directed_graph_unweighted();
+void adjacency_list_generic_directed_graph_weighted();
 
-void ex_adjacency_list_generic_directed_graph_weighted();
-
-void Ex::AdjacencyList::ex_adjacency_list_generic_directed_graph_test() {
-    ex_adjacency_list_generic_directed_graph_unweighted();
-    ex_adjacency_list_generic_directed_graph_weighted();
+void Ex::AdjacencyList::generic_directed_graph_test() {
+    adjacency_list_generic_directed_graph_unweighted();
+    adjacency_list_generic_directed_graph_weighted();
 }
 
-void ex_adjacency_list_generic_directed_graph_unweighted() {
+void adjacency_list_generic_directed_graph_unweighted() {
     GenericDirectedGraph<std::string> graph{};
     graph.insert_vertex(1, "A");
     graph.insert_vertex(3, "C");
@@ -55,17 +54,17 @@ void ex_adjacency_list_generic_directed_graph_unweighted() {
 
     auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 22, "V");
-    adjacencyListCheckVertex<std::string>(neighbors[1], 8, "H");
+    check_vertex<std::string>(neighbors[0], 22, "V");
+    check_vertex<std::string>(neighbors[1], 8, "H");
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 22, "V");
+    check_vertex<std::string>(neighbors[0], 22, "V");
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 1, "A");
+    check_vertex<std::string>(neighbors[0], 1, "A");
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 5, "E");
+    check_vertex<std::string>(neighbors[0], 5, "E");
     neighbors = graph.vertex_neighbors(8);
     assert(neighbors.empty());
     neighbors = graph.vertex_neighbors(22);
@@ -80,7 +79,7 @@ void ex_adjacency_list_generic_directed_graph_unweighted() {
     assert(!graph.is_edge_exist(2, 22));
 }
 
-void ex_adjacency_list_generic_directed_graph_weighted() {
+void adjacency_list_generic_directed_graph_weighted() {
     GenericDirectedGraph<std::string> graph{};
     graph.insert_vertex(1, "A");
     graph.insert_vertex(3, "C");
@@ -98,17 +97,17 @@ void ex_adjacency_list_generic_directed_graph_weighted() {
 
     auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 22, "V", 8);
-    adjacencyListCheckVertex<std::string>(neighbors[1], 8, "H", 3);
+    check_vertex<std::string>(neighbors[0], 22, "V", 8);
+    check_vertex<std::string>(neighbors[1], 8, "H", 3);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 22, "V", 5);
+    check_vertex<std::string>(neighbors[0], 22, "V", 5);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 1, "A", 1);
+    check_vertex<std::string>(neighbors[0], 1, "A", 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 1);
-    adjacencyListCheckVertex<std::string>(neighbors[0], 5, "E", 1);
+    check_vertex<std::string>(neighbors[0], 5, "E", 1);
     neighbors = graph.vertex_neighbors(8);
     assert(neighbors.empty());
     neighbors = graph.vertex_neighbors(22);

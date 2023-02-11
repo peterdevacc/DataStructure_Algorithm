@@ -275,7 +275,7 @@ namespace Ex::OrthogonalList {
         unsigned long edgeNum;
     };
 
-    void ex_orthogonal_list_generic_directed_graph_test();
+    void generic_directed_graph_test();
 
 }
 

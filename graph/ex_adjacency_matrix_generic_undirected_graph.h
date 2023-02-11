@@ -142,7 +142,7 @@ namespace Ex::AdjacencyMatrix {
         unsigned long edgeNum;
     };
 
-    void ex_adjacency_matrix_generic_undirected_graph_test();
+    void generic_undirected_graph_test();
 
 }
 

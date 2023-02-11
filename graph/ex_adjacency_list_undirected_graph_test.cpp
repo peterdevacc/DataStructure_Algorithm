@@ -11,16 +11,15 @@
 
 using namespace Ex::AdjacencyList;
 
-void ex_adjacency_list_undirected_graph_unweighted();
+void adjacency_list_undirected_graph_unweighted();
+void adjacency_list_undirected_graph_weighted();
 
-void ex_adjacency_list_undirected_graph_weighted();
-
-void Ex::AdjacencyList::ex_adjacency_list_undirected_graph_test() {
-    ex_adjacency_list_undirected_graph_unweighted();
-    ex_adjacency_list_undirected_graph_weighted();
+void Ex::AdjacencyList::undirected_graph_test() {
+    adjacency_list_undirected_graph_unweighted();
+    adjacency_list_undirected_graph_weighted();
 }
 
-void ex_adjacency_list_undirected_graph_unweighted() {
+void adjacency_list_undirected_graph_unweighted() {
     UnDirectedGraph graph{8};
     assert(graph.get_vertexMaxNum() == 8);
 
@@ -44,29 +43,29 @@ void ex_adjacency_list_undirected_graph_unweighted() {
 
     auto neighbors = graph.vertex_neighbors(0);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 1);
-    adjacencyListCheckVertex(neighbors[1], 6);
+    check_vertex(neighbors[0], 1);
+    check_vertex(neighbors[1], 6);
     neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 3);
-    adjacencyListCheckVertex(neighbors[0], 5);
-    adjacencyListCheckVertex(neighbors[1], 3);
-    adjacencyListCheckVertex(neighbors[2], 0);
+    check_vertex(neighbors[0], 5);
+    check_vertex(neighbors[1], 3);
+    check_vertex(neighbors[2], 0);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 3);
-    adjacencyListCheckVertex(neighbors[1], 5);
+    check_vertex(neighbors[0], 3);
+    check_vertex(neighbors[1], 5);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 2);
-    adjacencyListCheckVertex(neighbors[1], 1);
+    check_vertex(neighbors[0], 2);
+    check_vertex(neighbors[1], 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 1);
-    adjacencyListCheckVertex(neighbors[1], 2);
+    check_vertex(neighbors[0], 1);
+    check_vertex(neighbors[1], 2);
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 0);
-    adjacencyListCheckVertex(neighbors[1], 6);
+    check_vertex(neighbors[0], 0);
+    check_vertex(neighbors[1], 6);
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.empty());
 
@@ -82,7 +81,7 @@ void ex_adjacency_list_undirected_graph_unweighted() {
     assert(graph.get_edgeNum() == 4);
 }
 
-void ex_adjacency_list_undirected_graph_weighted() {
+void adjacency_list_undirected_graph_weighted() {
     UnDirectedGraph graph{8};
     graph.insert_edge(1, 5, 2);
     graph.insert_edge(3, 2, 3);
@@ -94,29 +93,29 @@ void ex_adjacency_list_undirected_graph_weighted() {
 
     auto neighbors = graph.vertex_neighbors(0);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 1, 1);
-    adjacencyListCheckVertex(neighbors[1], 6, 5);
+    check_vertex(neighbors[0], 1, 1);
+    check_vertex(neighbors[1], 6, 5);
     neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 3);
-    adjacencyListCheckVertex(neighbors[0], 5, 2);
-    adjacencyListCheckVertex(neighbors[1], 3, 1);
-    adjacencyListCheckVertex(neighbors[2], 0, 1);
+    check_vertex(neighbors[0], 5, 2);
+    check_vertex(neighbors[1], 3, 1);
+    check_vertex(neighbors[2], 0, 1);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 3, 3);
-    adjacencyListCheckVertex(neighbors[1], 5, 4);
+    check_vertex(neighbors[0], 3, 3);
+    check_vertex(neighbors[1], 5, 4);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 2, 3);
-    adjacencyListCheckVertex(neighbors[1], 1, 1);
+    check_vertex(neighbors[0], 2, 3);
+    check_vertex(neighbors[1], 1, 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 1, 2);
-    adjacencyListCheckVertex(neighbors[1], 2, 4);
+    check_vertex(neighbors[0], 1, 2);
+    check_vertex(neighbors[1], 2, 4);
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 2);
-    adjacencyListCheckVertex(neighbors[0], 0, 5);
-    adjacencyListCheckVertex(neighbors[1], 6, 1);
+    check_vertex(neighbors[0], 0, 5);
+    check_vertex(neighbors[1], 6, 1);
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.empty());
 }

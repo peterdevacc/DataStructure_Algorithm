@@ -11,16 +11,15 @@
 
 using namespace Ex::OrthogonalList;
 
-void ex_orthogonal_list_directed_graph_unweighted();
+void orthogonal_list_directed_graph_unweighted();
+void orthogonal_list_directed_graph_weighted();
 
-void ex_orthogonal_list_directed_graph_weighted();
-
-void Ex::OrthogonalList::ex_orthogonal_list_directed_graph_test() {
-    ex_orthogonal_list_directed_graph_unweighted();
-    ex_orthogonal_list_directed_graph_weighted();
+void Ex::OrthogonalList::directed_graph_test() {
+    orthogonal_list_directed_graph_unweighted();
+    orthogonal_list_directed_graph_weighted();
 }
 
-void ex_orthogonal_list_directed_graph_unweighted() {
+void orthogonal_list_directed_graph_unweighted() {
     DirectedGraph graph{8};
     assert(graph.get_vertexMaxNum() == 8);
 
@@ -39,42 +38,42 @@ void ex_orthogonal_list_directed_graph_unweighted() {
     auto n3 = graph.vertex_neighbors(3);
 
     assert(n0.size() == 2);
-    orthogonalListDirectedCheckEdgeData(n0[0], 1);
-    orthogonalListDirectedCheckEdgeData(n0[1], 2);
-    orthogonalListDirectedCheckEdgeField(n0[0], n0[1], n3[1]);
-    orthogonalListDirectedCheckEdgeField(n0[1], nullptr, n3[2]);
+    directed_check_edge_data(n0[0], 1);
+    directed_check_edge_data(n0[1], 2);
+    directed_check_edge_field(n0[0], n0[1], n3[1]);
+    directed_check_edge_field(n0[1], nullptr, n3[2]);
 
     assert(n1.empty());
 
     assert(n2.size() == 2);
-    orthogonalListDirectedCheckEdgeData(n2[0], 0);
-    orthogonalListDirectedCheckEdgeData(n2[1], 3);
-    orthogonalListDirectedCheckEdgeField(n2[0], n2[1], n3[0]);
-    orthogonalListDirectedCheckEdgeField(n2[1], nullptr, nullptr);
+    directed_check_edge_data(n2[0], 0);
+    directed_check_edge_data(n2[1], 3);
+    directed_check_edge_field(n2[0], n2[1], n3[0]);
+    directed_check_edge_field(n2[1], nullptr, nullptr);
 
     assert(n3.size() == 3);
-    orthogonalListDirectedCheckEdgeData(n3[0], 0);
-    orthogonalListDirectedCheckEdgeData(n3[1], 1);
-    orthogonalListDirectedCheckEdgeData(n3[2], 2);
-    orthogonalListDirectedCheckEdgeField(n3[0], n3[1], nullptr);
-    orthogonalListDirectedCheckEdgeField(n3[1], n3[2], nullptr);
-    orthogonalListDirectedCheckEdgeField(n3[2], nullptr, nullptr);
+    directed_check_edge_data(n3[0], 0);
+    directed_check_edge_data(n3[1], 1);
+    directed_check_edge_data(n3[2], 2);
+    directed_check_edge_field(n3[0], n3[1], nullptr);
+    directed_check_edge_field(n3[1], n3[2], nullptr);
+    directed_check_edge_field(n3[2], nullptr, nullptr);
 
     auto v0 = graph.get_vertex(0);
-    orthogonalListDirectedCheckVertexField(v0, n0[0], n2[0]);
+    directed_check_vertex_field(v0, n0[0], n2[0]);
     auto v1 = graph.get_vertex(1);
-    orthogonalListDirectedCheckVertexField(v1, nullptr, n0[0]);
+    directed_check_vertex_field(v1, nullptr, n0[0]);
     auto v2 = graph.get_vertex(2);
-    orthogonalListDirectedCheckVertexField(v2, n2[0], n0[1]);
+    directed_check_vertex_field(v2, n2[0], n0[1]);
     auto v3 = graph.get_vertex(3);
-    orthogonalListDirectedCheckVertexField(v3, n3[0], n2[1]);
+    directed_check_vertex_field(v3, n3[0], n2[1]);
 
     graph.remove_edge(3, 0);
     assert(graph.get_edgeNum() == 6);
     v3 = graph.get_vertex(3);
-    orthogonalListDirectedCheckVertexField(v3, n3[1], n2[1]);
+    directed_check_vertex_field(v3, n3[1], n2[1]);
     n2 = graph.vertex_neighbors(2);
-    orthogonalListDirectedCheckEdgeField(n2[0], n2[1], nullptr);
+    directed_check_edge_field(n2[0], n2[1], nullptr);
 
     graph.remove_edge(0, 1);
     assert(graph.get_edgeNum() == 5);
@@ -83,13 +82,13 @@ void ex_orthogonal_list_directed_graph_unweighted() {
     n0 = graph.vertex_neighbors(0);
     n2 = graph.vertex_neighbors(2);
     n3 = graph.vertex_neighbors(3);
-    orthogonalListDirectedCheckEdgeData(n0[0], 2);
-    orthogonalListDirectedCheckVertexField(v0, n0[0], n2[0]);
-    orthogonalListDirectedCheckVertexField(v1, nullptr, n3[0]);
-    orthogonalListDirectedCheckEdgeField(n0[0], nullptr, n3[1]);
+    directed_check_edge_data(n0[0], 2);
+    directed_check_vertex_field(v0, n0[0], n2[0]);
+    directed_check_vertex_field(v1, nullptr, n3[0]);
+    directed_check_edge_field(n0[0], nullptr, n3[1]);
 }
 
-void ex_orthogonal_list_directed_graph_weighted() {
+void orthogonal_list_directed_graph_weighted() {
     DirectedGraph graph{8};
     graph.insert_edge(0, 1, 2);
     graph.insert_edge(0, 2, 3);
@@ -105,17 +104,17 @@ void ex_orthogonal_list_directed_graph_weighted() {
     auto n3 = graph.vertex_neighbors(3);
 
     assert(n0.size() == 2);
-    orthogonalListDirectedCheckEdgeData(n0[0], 1, 2);
-    orthogonalListDirectedCheckEdgeData(n0[1], 2, 3);
+    directed_check_edge_data(n0[0], 1, 2);
+    directed_check_edge_data(n0[1], 2, 3);
 
     assert(n1.empty());
 
     assert(n2.size() == 2);
-    orthogonalListDirectedCheckEdgeData(n2[0], 0, 3);
-    orthogonalListDirectedCheckEdgeData(n2[1], 3, 1);
+    directed_check_edge_data(n2[0], 0, 3);
+    directed_check_edge_data(n2[1], 3, 1);
 
     assert(n3.size() == 3);
-    orthogonalListDirectedCheckEdgeData(n3[0], 0, 1);
-    orthogonalListDirectedCheckEdgeData(n3[1], 1, 2);
-    orthogonalListDirectedCheckEdgeData(n3[2], 2, 1);
+    directed_check_edge_data(n3[0], 0, 1);
+    directed_check_edge_data(n3[1], 1, 2);
+    directed_check_edge_data(n3[2], 2, 1);
 }

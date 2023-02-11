@@ -11,16 +11,15 @@
 
 using namespace Ex::AdjacencyMatrix;
 
-void ex_adjacency_matrix_generic_undirected_graph_unweighted();
+void adjacency_matrix_generic_undirected_graph_unweighted();
+void adjacency_matrix_generic_undirected_graph_weighted();
 
-void ex_adjacency_matrix_generic_undirected_graph_weighted();
-
-void Ex::AdjacencyMatrix::ex_adjacency_matrix_generic_undirected_graph_test() {
-    ex_adjacency_matrix_generic_undirected_graph_unweighted();
-    ex_adjacency_matrix_generic_undirected_graph_weighted();
+void Ex::AdjacencyMatrix::generic_undirected_graph_test() {
+    adjacency_matrix_generic_undirected_graph_unweighted();
+    adjacency_matrix_generic_undirected_graph_weighted();
 }
 
-void ex_adjacency_matrix_generic_undirected_graph_unweighted() {
+void adjacency_matrix_generic_undirected_graph_unweighted() {
     GenericUnDirectedGraph<std::string> graph{8};
     assert(graph.get_vertexMaxNum() == 8);
 
@@ -58,27 +57,27 @@ void ex_adjacency_matrix_generic_undirected_graph_unweighted() {
 
     auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 5, "E");
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 6, "F");
+    check_vertex<std::string>(neighbors[0], 5, "E");
+    check_vertex<std::string>(neighbors[1], 6, "F");
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 7, "G");
+    check_vertex<std::string>(neighbors[0], 7, "G");
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 6, "F");
+    check_vertex<std::string>(neighbors[0], 6, "F");
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 1, "A");
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 6, "F");
+    check_vertex<std::string>(neighbors[0], 1, "A");
+    check_vertex<std::string>(neighbors[1], 6, "F");
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 3);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 1, "A");
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 3, "C");
-    adjacencyMatrixCheckVertex<std::string>(neighbors[2], 5, "E");
+    check_vertex<std::string>(neighbors[0], 1, "A");
+    check_vertex<std::string>(neighbors[1], 3, "C");
+    check_vertex<std::string>(neighbors[2], 5, "E");
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 2, "B");
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 7, "G");
+    check_vertex<std::string>(neighbors[0], 2, "B");
+    check_vertex<std::string>(neighbors[1], 7, "G");
 
     graph.remove_vertex(1);
     assert(!graph.is_vertex_exist(1));
@@ -92,7 +91,7 @@ void ex_adjacency_matrix_generic_undirected_graph_unweighted() {
     assert(graph.get_edgeNum() == 3);
 }
 
-void ex_adjacency_matrix_generic_undirected_graph_weighted() {
+void adjacency_matrix_generic_undirected_graph_weighted() {
     GenericUnDirectedGraph<std::string> graph{8};
     graph.insert_vertex(1, "A");
     graph.insert_vertex(1, "A");
@@ -112,25 +111,25 @@ void ex_adjacency_matrix_generic_undirected_graph_weighted() {
 
     auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 5, "E", 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 6, "F", 4);
+    check_vertex<std::string>(neighbors[0], 5, "E", 2);
+    check_vertex<std::string>(neighbors[1], 6, "F", 4);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 7, "G", 5);
+    check_vertex<std::string>(neighbors[0], 7, "G", 5);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 6, "F", 1);
+    check_vertex<std::string>(neighbors[0], 6, "F", 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 1, "A", 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 6, "F", 2);
+    check_vertex<std::string>(neighbors[0], 1, "A", 2);
+    check_vertex<std::string>(neighbors[1], 6, "F", 2);
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 3);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 1, "A", 4);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 3, "C", 1);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[2], 5, "E", 2);
+    check_vertex<std::string>(neighbors[0], 1, "A", 4);
+    check_vertex<std::string>(neighbors[1], 3, "C", 1);
+    check_vertex<std::string>(neighbors[2], 5, "E", 2);
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.size() == 2);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[0], 2, "B", 5);
-    adjacencyMatrixCheckVertex<std::string>(neighbors[1], 7, "G", 1);
+    check_vertex<std::string>(neighbors[0], 2, "B", 5);
+    check_vertex<std::string>(neighbors[1], 7, "G", 1);
 }

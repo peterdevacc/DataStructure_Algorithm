@@ -374,7 +374,7 @@ namespace Ex::AdjacencyMultiList {
         unsigned long edgeNum;
     };
 
-    void ex_adjacency_multi_list_generic_undirected_graph_test();
+    void generic_undirected_graph_test();
 
 }
 

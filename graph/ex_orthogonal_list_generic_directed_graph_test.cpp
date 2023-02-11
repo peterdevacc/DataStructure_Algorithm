@@ -11,24 +11,23 @@
 
 using namespace Ex::OrthogonalList;
 
-void ex_orthogonal_list_generic_directed_graph_unweighted();
-
-void ex_orthogonal_list_generic_directed_graph_weighted();
-
-template<typename T>
-void ex_orthogonal_list_generic_directed_graph_neighbor_test(GenericDirectedGraph<T> &graph);
+void orthogonal_list_generic_directed_graph_unweighted();
+void orthogonal_list_generic_directed_graph_weighted();
 
 template<typename T>
-void ex_orthogonal_list_generic_directed_graph_remove_vertex_test(GenericDirectedGraph<T> &graph);
+void orthogonal_list_generic_directed_graph_neighbor_test(GenericDirectedGraph<T> &graph);
 
-void ex_orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test();
+template<typename T>
+void orthogonal_list_generic_directed_graph_remove_vertex_test(GenericDirectedGraph<T> &graph);
 
-void Ex::OrthogonalList::ex_orthogonal_list_generic_directed_graph_test() {
-    ex_orthogonal_list_generic_directed_graph_unweighted();
-    ex_orthogonal_list_generic_directed_graph_weighted();
+void orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test();
+
+void Ex::OrthogonalList::generic_directed_graph_test() {
+    orthogonal_list_generic_directed_graph_unweighted();
+    orthogonal_list_generic_directed_graph_weighted();
 }
 
-void ex_orthogonal_list_generic_directed_graph_unweighted() {
+void orthogonal_list_generic_directed_graph_unweighted() {
     GenericDirectedGraph<std::string> graph{};
     graph.insert_vertex(0, "A");
     graph.insert_vertex(1, "B");
@@ -45,12 +44,12 @@ void ex_orthogonal_list_generic_directed_graph_unweighted() {
     graph.insert_edge(3, 2);
     assert(graph.get_edgeNum() == 7);
 
-    ex_orthogonal_list_generic_directed_graph_neighbor_test(graph);
-    ex_orthogonal_list_generic_directed_graph_remove_vertex_test(graph);
-    ex_orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test();
+    orthogonal_list_generic_directed_graph_neighbor_test(graph);
+    orthogonal_list_generic_directed_graph_remove_vertex_test(graph);
+    orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test();
 }
 
-void ex_orthogonal_list_generic_directed_graph_weighted() {
+void orthogonal_list_generic_directed_graph_weighted() {
     GenericDirectedGraph<std::string> graph{};
     graph.insert_vertex(0, "A");
     graph.insert_vertex(1, "B");
@@ -67,72 +66,72 @@ void ex_orthogonal_list_generic_directed_graph_weighted() {
 
     auto n0 = graph.vertex_neighbors(0);
     assert(n0.size() == 2);
-    orthogonalListDirectedCheckEdgeData<std::string>(n0[0], 1, "B", 3);
-    orthogonalListDirectedCheckEdgeData<std::string>(n0[1], 2, "C", 2);
+    directed_check_edge_data<std::string>(n0[0], 1, "B", 3);
+    directed_check_edge_data<std::string>(n0[1], 2, "C", 2);
 
     auto n1 = graph.vertex_neighbors(1);
     assert(n1.empty());
 
     auto n2 = graph.vertex_neighbors(2);
     assert(n2.size() == 2);
-    orthogonalListDirectedCheckEdgeData<std::string>(n2[0], 0, "A", 2);
-    orthogonalListDirectedCheckEdgeData<std::string>(n2[1], 3, "D", 1);
+    directed_check_edge_data<std::string>(n2[0], 0, "A", 2);
+    directed_check_edge_data<std::string>(n2[1], 3, "D", 1);
 
     auto n3 = graph.vertex_neighbors(3);
     assert(n3.size() == 3);
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[0], 0, "A", 4);
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[1], 1, "B", 5);
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[2], 2, "C", 2);
+    directed_check_edge_data<std::string>(n3[0], 0, "A", 4);
+    directed_check_edge_data<std::string>(n3[1], 1, "B", 5);
+    directed_check_edge_data<std::string>(n3[2], 2, "C", 2);
 }
 
 template<typename T>
-void ex_orthogonal_list_generic_directed_graph_neighbor_test(GenericDirectedGraph<T> &graph) {
+void orthogonal_list_generic_directed_graph_neighbor_test(GenericDirectedGraph<T> &graph) {
     auto n0 = graph.vertex_neighbors(0);
     assert(n0.size() == 2);
-    orthogonalListDirectedCheckEdgeData<std::string>(n0[0], 1, "B");
-    orthogonalListDirectedCheckEdgeData<std::string>(n0[1], 2, "C");
+    directed_check_edge_data<std::string>(n0[0], 1, "B");
+    directed_check_edge_data<std::string>(n0[1], 2, "C");
 
     auto n1 = graph.vertex_neighbors(1);
     assert(n1.empty());
 
     auto n2 = graph.vertex_neighbors(2);
     assert(n2.size() == 2);
-    orthogonalListDirectedCheckEdgeData<std::string>(n2[0], 0, "A");
-    orthogonalListDirectedCheckEdgeData<std::string>(n2[1], 3, "D");
+    directed_check_edge_data<std::string>(n2[0], 0, "A");
+    directed_check_edge_data<std::string>(n2[1], 3, "D");
 
     auto n3 = graph.vertex_neighbors(3);
     assert(n3.size() == 3);
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[0], 0, "A");
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[1], 1, "B");
-    orthogonalListDirectedCheckEdgeData<std::string>(n3[2], 2, "C");
+    directed_check_edge_data<std::string>(n3[0], 0, "A");
+    directed_check_edge_data<std::string>(n3[1], 1, "B");
+    directed_check_edge_data<std::string>(n3[2], 2, "C");
 
     auto v0 = graph.get_vertex(0);
-    orthogonalListDirectedCheckVertexField(v0, n0[0], n2[0]);
+    directed_check_vertex_field(v0, n0[0], n2[0]);
     auto v1 = graph.get_vertex(1);
-    orthogonalListDirectedCheckVertexField<std::string>(v1, nullptr, n0[0]);
+    directed_check_vertex_field<std::string>(v1, nullptr, n0[0]);
     auto v2 = graph.get_vertex(2);
-    orthogonalListDirectedCheckVertexField(v2, n2[0], n0[1]);
+    directed_check_vertex_field(v2, n2[0], n0[1]);
     auto v3 = graph.get_vertex(3);
-    orthogonalListDirectedCheckVertexField(v3, n3[0], n2[1]);
+    directed_check_vertex_field(v3, n3[0], n2[1]);
 
     assert(graph.get_vertex(0)->firstOut == n2[0]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n0[0], nullptr, n0[1], nullptr, n3[1]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n0[1], n0[0], nullptr, nullptr, n3[2]);
+    directed_check_edge_field<std::string>(n0[0], nullptr, n0[1], nullptr, n3[1]);
+    directed_check_edge_field<std::string>(n0[1], n0[0], nullptr, nullptr, n3[2]);
 
     assert(graph.get_vertex(1)->firstOut == n0[0]);
 
     assert(graph.get_vertex(2)->firstOut == n0[1]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n2[0], nullptr, n2[1], nullptr, n3[0]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n2[1], n2[0], nullptr, nullptr, nullptr);
+    directed_check_edge_field<std::string>(n2[0], nullptr, n2[1], nullptr, n3[0]);
+    directed_check_edge_field<std::string>(n2[1], n2[0], nullptr, nullptr, nullptr);
 
     assert(graph.get_vertex(3)->firstOut == n2[1]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[0], nullptr, n3[1], n2[0], nullptr);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[1], n3[0], n3[2], n0[0], nullptr);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[2], n3[1], nullptr, n0[1], nullptr);
+    directed_check_edge_field<std::string>(n3[0], nullptr, n3[1], n2[0], nullptr);
+    directed_check_edge_field<std::string>(n3[1], n3[0], n3[2], n0[0], nullptr);
+    directed_check_edge_field<std::string>(n3[2], n3[1], nullptr, n0[1], nullptr);
 }
 
 template<typename T>
-void ex_orthogonal_list_generic_directed_graph_remove_vertex_test(GenericDirectedGraph<T> &graph) {
+void orthogonal_list_generic_directed_graph_remove_vertex_test(GenericDirectedGraph<T> &graph) {
     graph.remove_vertex(2);
 
     assert(graph.get_vertexNum() == 3);
@@ -141,16 +140,16 @@ void ex_orthogonal_list_generic_directed_graph_remove_vertex_test(GenericDirecte
     auto n3 = graph.vertex_neighbors(3);
 
     assert(n0.size() == 1);
-    orthogonalListDirectedCheckEdgeField<std::string>(n0[0], nullptr, nullptr, nullptr, n3[1]);
+    directed_check_edge_field<std::string>(n0[0], nullptr, nullptr, nullptr, n3[1]);
     assert(graph.get_vertex(0)->firstOut == n3[0]);
 
     assert(n3.size() == 2);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[0], nullptr, n3[1], nullptr, nullptr);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[1], n3[0], nullptr, n0[0], nullptr);
+    directed_check_edge_field<std::string>(n3[0], nullptr, n3[1], nullptr, nullptr);
+    directed_check_edge_field<std::string>(n3[1], n3[0], nullptr, n0[0], nullptr);
     assert(graph.get_vertex(3)->firstOut == nullptr);
 }
 
-void ex_orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test() {
+void orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test() {
     GenericDirectedGraph<std::string> graph{};
     graph.insert_vertex(0, "A");
     graph.insert_vertex(1, "B");
@@ -176,6 +175,6 @@ void ex_orthogonal_list_generic_directed_graph_remove_edge_test_remove_edge_test
 
     assert(graph.get_vertex(0)->firstOut == n3[0]);
     assert(graph.get_vertex(2)->firstIn == n2[0]);
-    orthogonalListDirectedCheckEdgeField<std::string>(n2[0], nullptr, nullptr, nullptr, nullptr);
-    orthogonalListDirectedCheckEdgeField<std::string>(n3[0], nullptr, n3[1], nullptr, nullptr);
+    directed_check_edge_field<std::string>(n2[0], nullptr, nullptr, nullptr, nullptr);
+    directed_check_edge_field<std::string>(n3[0], nullptr, n3[1], nullptr, nullptr);
 }

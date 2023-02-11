@@ -9,7 +9,7 @@
 
 #include "core_graph.h"
 
-void Ex::AdjacencyList::adjacencyListCheckVertex(
+void Ex::AdjacencyList::check_vertex(
     Ex::AdjacencyList::Vertex *vertex,
     unsigned long num,
     unsigned long weight
@@ -18,7 +18,7 @@ void Ex::AdjacencyList::adjacencyListCheckVertex(
     assert(vertex->weight == weight);
 }
 
-void Ex::AdjacencyMatrix::adjacencyMatrixCheckVertex(
+void Ex::AdjacencyMatrix::check_vertex(
     std::pair<unsigned long, unsigned long> vertex,
     unsigned long data,
     unsigned long weight
@@ -27,7 +27,7 @@ void Ex::AdjacencyMatrix::adjacencyMatrixCheckVertex(
     assert(vertex.second == weight);
 }
 
-void Ex::AdjacencyMultiList::adjacencyMultiListUnDirectedCheckEdgeData(
+void Ex::AdjacencyMultiList::undirected_check_edge_data(
     Edge *edge,
     unsigned long position,
     unsigned long weight
@@ -36,7 +36,7 @@ void Ex::AdjacencyMultiList::adjacencyMultiListUnDirectedCheckEdgeData(
     assert(edge->tailVertexPosition == position);
 }
 
-void Ex::AdjacencyMultiList::adjacencyMultiListUnDirectedCheckEdgeField(
+void Ex::AdjacencyMultiList::undirected_check_edge_field(
     Edge *edge,
     Edge *headRelatedNext,
     Edge *tailRelatedNext
@@ -45,7 +45,7 @@ void Ex::AdjacencyMultiList::adjacencyMultiListUnDirectedCheckEdgeField(
     assert(edge->tailRelatedNext == tailRelatedNext);
 }
 
-void Ex::OrthogonalList::orthogonalListDirectedCheckVertexField(
+void Ex::OrthogonalList::directed_check_vertex_field(
     std::optional<Vertex> vertex,
     Edge *in,
     Edge *out
@@ -54,7 +54,7 @@ void Ex::OrthogonalList::orthogonalListDirectedCheckVertexField(
     assert(vertex.value().firstOut == out);
 }
 
-void Ex::OrthogonalList::orthogonalListDirectedCheckEdgeField(
+void Ex::OrthogonalList::directed_check_edge_field(
     Edge *edge,
     Edge *nextHead,
     Edge *nextTail
@@ -63,7 +63,7 @@ void Ex::OrthogonalList::orthogonalListDirectedCheckEdgeField(
     assert(edge->tailFieldNext == nextTail);
 }
 
-void Ex::OrthogonalList::orthogonalListDirectedCheckEdgeData(
+void Ex::OrthogonalList::directed_check_edge_data(
     Edge *neighbor,
     unsigned long num,
     unsigned long weight

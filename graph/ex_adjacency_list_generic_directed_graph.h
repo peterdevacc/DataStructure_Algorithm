@@ -279,7 +279,7 @@ namespace Ex::AdjacencyList {
         unsigned long edgeNum;
     };
 
-    void ex_adjacency_list_generic_directed_graph_test();
+    void generic_directed_graph_test();
 
 }
 

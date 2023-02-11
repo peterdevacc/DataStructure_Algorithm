@@ -171,7 +171,7 @@ namespace Ex::AdjacencyList {
         unsigned long edgeNum;
     };
 
-    void ex_adjacency_list_undirected_graph_test();
+    void undirected_graph_test();
 
 }
 

@@ -151,7 +151,7 @@ namespace Ex::OrthogonalList {
         unsigned long edgeNum;
     };
 
-    void ex_orthogonal_list_directed_graph_test();
+    void directed_graph_test();
 
 }
 

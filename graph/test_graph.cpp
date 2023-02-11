@@ -21,16 +21,16 @@
 #include "ex_orthogonal_list_generic_directed_graph.h"
 
 void Ex::test_graph() {
-    AdjacencyList::ex_adjacency_list_directed_graph_test();
-    AdjacencyList::ex_adjacency_list_generic_directed_graph_test();
-    AdjacencyList::ex_adjacency_list_undirected_graph_test();
-    AdjacencyList::ex_adjacency_list_generic_undirected_graph_test();
-    AdjacencyMatrix::ex_adjacency_matrix_directed_graph_test();
-    AdjacencyMatrix::ex_adjacency_matrix_generic_directed_graph_test();
-    AdjacencyMatrix::ex_adjacency_matrix_undirected_graph_test();
-    AdjacencyMatrix::ex_adjacency_matrix_generic_undirected_graph_test();
-    AdjacencyMultiList::ex_adjacency_multi_list_generic_undirected_graph_test();
-    AdjacencyMultiList::ex_adjacency_multi_list_undirected_graph_test();
-    OrthogonalList::ex_orthogonal_list_directed_graph_test();
-    OrthogonalList::ex_orthogonal_list_generic_directed_graph_test();
+    AdjacencyList::directed_graph_test();
+    AdjacencyList::generic_directed_graph_test();
+    AdjacencyList::undirected_graph_test();
+    AdjacencyList::generic_undirected_graph_test();
+    AdjacencyMatrix::directed_graph_test();
+    AdjacencyMatrix::generic_directed_graph_test();
+    AdjacencyMatrix::undirected_graph_test();
+    AdjacencyMatrix::generic_undirected_graph_test();
+    AdjacencyMultiList::generic_undirected_graph_test();
+    AdjacencyMultiList::undirected_graph_test();
+    OrthogonalList::directed_graph_test();
+    OrthogonalList::generic_directed_graph_test();
 }
