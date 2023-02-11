@@ -9,7 +9,7 @@
 
 #include "ex_open_addressing_hash_table.h"
 
-void Ex::OpenAddressing::ex_open_addressing_hash_table_test() {
+void Ex::OpenAddressing::hash_table_test() {
     const unsigned int capacity = 10;
     Ex::OpenAddressing::HashTable<int> ht{capacity};
 

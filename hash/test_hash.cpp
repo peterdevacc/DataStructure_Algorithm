@@ -10,6 +10,6 @@
 #include "ex_open_addressing_hash_table.h"
 
 void Ex::test_hash() {
-    ClosedAddressing::ex_closed_addressing_hash_table_test();
-    OpenAddressing::ex_open_addressing_hash_table_test();
+    ClosedAddressing::hash_table_test();
+    OpenAddressing::hash_table_test();
 }

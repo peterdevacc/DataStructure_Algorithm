@@ -137,7 +137,7 @@ namespace Ex::OpenAddressing {
         uint32_t seed;
     };
 
-    void ex_open_addressing_hash_table_test();
+    void hash_table_test();
 
 }
 

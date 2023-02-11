@@ -134,7 +134,7 @@ namespace Ex::ClosedAddressing {
         uint32_t seed;
     };
 
-    void ex_closed_addressing_hash_table_test();
+    void hash_table_test();
 
 }
 

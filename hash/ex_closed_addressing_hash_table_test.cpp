@@ -9,7 +9,7 @@
 
 #include "ex_closed_addressing_hash_table.h"
 
-void Ex::ClosedAddressing::ex_closed_addressing_hash_table_test() {
+void Ex::ClosedAddressing::hash_table_test() {
     const unsigned int size = 2;
     auto strList = {
         std::string{"hello"},
