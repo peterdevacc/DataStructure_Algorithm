@@ -15,6 +15,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/hash)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tree)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/graph)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/sort)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dynamic)
 
 file(
         GLOB SOURCES
@@ -36,6 +37,7 @@ target_link_libraries(
             tree
             graph
             sort
+            dynamic
         PRIVATE
             Threads::Threads
 )

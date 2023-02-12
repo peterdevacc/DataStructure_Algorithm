@@ -12,6 +12,7 @@
 #include "tree/core_tree.h"
 #include "graph/core_graph.h"
 #include "sort/core_sort.h"
+#include "dynamic/core_dynamic.h"
 
 int main() {
     Ex::test_array();
@@ -23,5 +24,6 @@ int main() {
     Ex::test_tree();
     Ex::test_graph();
     Ex::test_sorting();
+    Ex::test_dynamic();
     return 0;
 }
