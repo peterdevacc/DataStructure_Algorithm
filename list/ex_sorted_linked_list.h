@@ -104,7 +104,7 @@ namespace Ex::LinkedListImpl {
         }
 
         auto at(unsigned long position) {
-            if (position >= 0 && position < size) {
+            if (position < size) {
                 auto temp = head;
                 unsigned long counter = 0;
                 while (temp != nullptr) {

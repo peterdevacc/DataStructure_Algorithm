@@ -121,7 +121,7 @@ namespace Ex::LinkedListImpl {
         }
 
         auto at(unsigned long position) {
-            if (position >= 0 && position < size) {
+            if (position < size) {
                 if (position == 0) {
                     return get_head();
                 }

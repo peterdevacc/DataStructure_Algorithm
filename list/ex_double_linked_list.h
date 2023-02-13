@@ -51,6 +51,33 @@ namespace Ex::LinkedListImpl {
             pivot = node;
         }
 
+        void remove(T data) {
+            if (size > 0) {
+                if (head->data == data) {
+                    remove_head();
+                    return;
+                }
+
+                if (tail->data == data) {
+                    remove_tail();
+                    return;
+                }
+
+                auto temp = head->next;
+                while (temp != tail) {
+                    if (temp->data == data) {
+                        auto d = temp;
+                        temp->prev->next = temp->next;
+                        temp->next->prev = temp->prev;
+                        delete d;
+                        size--;
+                        return;
+                    }
+                    temp = temp->next;
+                }
+            }
+        }
+
         void remove_head() {
             if (size > 0) {
                 auto d = head;
@@ -83,33 +110,6 @@ namespace Ex::LinkedListImpl {
             }
         }
 
-        void remove(T data) {
-            if (size > 0) {
-                if (head->data == data) {
-                    remove_head();
-                    return;
-                }
-
-                if (tail->data == data) {
-                    remove_tail();
-                    return;
-                }
-
-                auto temp = head->next;
-                while (temp != tail) {
-                    if (temp->data == data) {
-                        auto d = temp;
-                        temp->prev->next = temp->next;
-                        temp->next->prev = temp->prev;
-                        delete d;
-                        size--;
-                        return;
-                    }
-                    temp = temp->next;
-                }
-            }
-        }
-
         auto get_head() {
             if (size == 0) {
                 return std::optional<T>();
@@ -125,7 +125,7 @@ namespace Ex::LinkedListImpl {
         }
 
         auto at(unsigned long position) {
-            if (position >= 0 && position < size) {
+            if (position < size) {
                 if (position == 0) {
                     return head->data;
                 }
