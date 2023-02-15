@@ -39,6 +39,7 @@
 - binary search tree
 - avl tree
 - splay tree
+- prefix tree
 
 ### hash 哈希
 

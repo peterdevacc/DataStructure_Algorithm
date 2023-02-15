@@ -14,6 +14,8 @@
 #include <stack>
 #include <cassert>
 #include <string>
+#include <list>
+#include <vector>
 
 namespace Ex {
 
@@ -53,6 +55,11 @@ namespace Ex {
             SplayTreeNode *parent{nullptr};
             long num{0};
             std::optional<T> data;
+        };
+
+        struct PrefixTreeNode {
+            std::list<PrefixTreeNode *> prefix{};
+            std::optional<char> data;
         };
 
     }

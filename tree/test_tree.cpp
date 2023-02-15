@@ -10,9 +10,11 @@
 #include "ex_avl_tree.h"
 #include "ex_binary_search_tree.h"
 #include "ex_splay_tree.h"
+#include "ex_prefix_tree.h"
 
 void Ex::test_tree() {
     LinkedListImpl::avl_tree_test();
     LinkedListImpl::binary_search_tree_test();
     LinkedListImpl::splay_tree_test();
+    LinkedListImpl::prefix_tree_test();
 }
