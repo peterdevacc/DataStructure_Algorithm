@@ -14,16 +14,15 @@
 
 namespace Ex::AdjacencyMatrix {
 
+    template<typename T>
     class UnDirectedGraph {
     public:
         explicit UnDirectedGraph(unsigned long vertexMaxNum)
-                : vertexMaxNum(vertexMaxNum), edgeNum(0) {
-            vertices = new unsigned long *[vertexMaxNum];
-            for (unsigned long i = 0; i < vertexMaxNum; ++i) {
-                vertices[i] = new unsigned long[vertexMaxNum];
-                for (unsigned long j = 0; j < vertexMaxNum; ++j) {
-                    vertices[i][j] = 0;
-                }
+            : vertexMaxNum(vertexMaxNum + 1), vertexNum(0), edgeNum(0)
+        {
+            vertices = new Vertex<T> *[this->vertexMaxNum];
+            for (unsigned long i = 0; i < this->vertexMaxNum; ++i) {
+                vertices[i] = new Vertex<T>[this->vertexMaxNum];
             }
         }
 
@@ -34,33 +33,100 @@ namespace Ex::AdjacencyMatrix {
             delete[]vertices;
         }
 
+        void insert_edge(
+            unsigned long num1, T data1, unsigned long num2, T data2,
+            unsigned long weight = 1
+        ) {
+            if (num1 >= 1 && num1 < vertexMaxNum && num2 >= 1 && num2 < vertexMaxNum) {
+                if (vertices[num1]->num == 0) {
+                    vertices[num1]->num = num1;
+                    vertices[num1]->data = data1;
+                    vertexNum++;
+                }
+
+                if (vertices[num2]->num == 0) {
+                    vertices[num2]->num = num2;
+                    vertices[num2]->data = data2;
+                    vertexNum++;
+                }
+
+                if (vertices[num1][num2].weight == 0) {
+                    vertices[num1][num2].num = num2;
+                    vertices[num1][num2].weight = weight;
+                    vertices[num1][num2].data = vertices[num2]->data;
+                    vertices[num2][num1].num = num1;
+                    vertices[num2][num1].weight = weight;
+                    vertices[num2][num1].data = vertices[num1]->data;
+                    edgeNum++;
+                }
+            }
+        }
+
         void insert_edge(unsigned long num1, unsigned long num2, unsigned long weight = 1) {
-            if (check_vertex_pair(num1, num2)) {
-                if (vertices[num1][num2] == 0) {
-                    vertices[num1][num2] = weight;
-                    vertices[num2][num1] = weight;
+            if (verify_vertex_pair(num1, num2)) {
+                if (vertices[num1][num2].weight == 0) {
+                    vertices[num1][num2].num = num2;
+                    vertices[num1][num2].weight = weight;
+                    vertices[num1][num2].data = vertices[num2]->data;
+                    vertices[num2][num1].num = num1;
+                    vertices[num2][num1].weight = weight;
+                    vertices[num2][num1].data = vertices[num1]->data;
                     edgeNum++;
                 }
             }
         }
 
         void remove_edge(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2) && edgeNum > 0) {
-                if (vertices[num1][num2] != 0) {
-                    vertices[num1][num2] = 0;
-                    vertices[num2][num1] = 0;
+            if (edgeNum > 0 && verify_vertex_pair(num1, num2)) {
+                if (vertices[num1][num2].weight != 0) {
+                    vertices[num1][num2].num = 0;
+                    vertices[num1][num2].weight = 0;
+                    vertices[num1][num2].data = std::optional<T>();
+                    vertices[num2][num1].num = 0;
+                    vertices[num2][num1].weight = 0;
+                    vertices[num2][num1].data = std::optional<T>();
                     edgeNum--;
                 }
             }
         }
 
+        void insert_vertex(unsigned long num, T data) {
+            if (num >= 1 && num < vertexMaxNum && vertices[num]->num == 0) {
+                vertices[num]->num = num;
+                vertices[num]->data = data;
+                vertexNum++;
+            }
+        }
+
+        void remove_vertex(unsigned long num) {
+            if (verify_vertex(num)) {
+                for (unsigned long i = 1; i < vertexMaxNum; ++i) {
+                    if (vertices[i][num].weight != 0 && vertices[num][i].weight != 0) {
+                        vertices[i][num].num = 0;
+                        vertices[i][num].data = std::optional<T>();
+                        vertices[i][num].weight = 0;
+                        vertices[num][i].num = 0;
+                        vertices[num][i].data = std::optional<T>();
+                        vertices[num][i].weight = 0;
+
+                        edgeNum--;
+                    }
+                }
+
+                vertices[num]->num = 0;
+                vertices[num]->weight = 0;
+                vertices[num]->data = std::optional<T>();
+                vertexNum--;
+            }
+        }
+
         auto vertex_neighbors(unsigned long num) {
-            std::vector<std::pair<unsigned long, unsigned long>> neighbors{};
-            if (check_vertex(num)) {
+            std::vector<Vertex < T>> neighbors{};
+            if (verify_vertex(num)) {
                 auto edges = vertices[num];
-                for (unsigned long i = 0; i < vertexMaxNum; ++i) {
-                    if (edges[i] != 0) {
-                        neighbors.push_back(std::make_pair<>(i, edges[i]));
+                for (unsigned long i = 1; i < vertexMaxNum; ++i) {
+                    if (edges[i].weight != 0) {
+                        neighbors.push_back(edges[i]);
                     }
                 }
             }
@@ -68,16 +134,24 @@ namespace Ex::AdjacencyMatrix {
             return neighbors;
         }
 
+        auto is_vertex_exist(unsigned long num) {
+            return verify_vertex(num);
+        }
+
         auto is_edge_exist(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2) && edgeNum > 0) {
-                return vertices[num1][num2] != 0;
+            if (verify_vertex_pair(num1, num2) && edgeNum > 0) {
+                return vertices[num1][num2].weight != 0;
             }
 
             return false;
         }
 
         auto get_vertexMaxNum() {
-            return vertexMaxNum;
+            return vertexMaxNum - 1;
+        }
+
+        auto get_vertexNum() {
+            return vertexNum;
         }
 
         auto get_edgeNum() {
@@ -85,16 +159,17 @@ namespace Ex::AdjacencyMatrix {
         }
 
     private:
-        bool check_vertex(unsigned long num) {
-            return num < vertexMaxNum;
+        bool verify_vertex(unsigned long num) {
+            return num >= 1 && num < vertexMaxNum && vertices[num]->num != 0;
         }
 
-        bool check_vertex_pair(unsigned long num1, unsigned long num2) {
-            return check_vertex(num1) && check_vertex(num2);
+        bool verify_vertex_pair(unsigned long num1, unsigned long num2) {
+            return verify_vertex(num1) && verify_vertex(num2);
         }
 
-        unsigned long **vertices;
+        Vertex<T> **vertices;
         unsigned long vertexMaxNum;
+        unsigned long vertexNum;
         unsigned long edgeNum;
     };
 

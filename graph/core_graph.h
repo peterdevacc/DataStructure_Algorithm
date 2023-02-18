@@ -20,30 +20,17 @@ namespace Ex {
 
     namespace AdjacencyList {
 
+        template<typename T>
         struct Vertex {
             Vertex *next{nullptr};
             unsigned long num{0};
             unsigned long weight{0};
-        };
-
-        template<typename T>
-        struct GenericVertex {
-            GenericVertex *next{nullptr};
-            GenericVertex *edge{nullptr};
-            std::optional<long> num;
-            unsigned long weight{0};
             std::optional<T> data;
         };
 
-        void check_vertex(
-            Vertex *vertex,
-            unsigned long num,
-            unsigned long weight = 1
-        );
-
         template<typename T>
         void check_vertex(
-            GenericVertex<T> *vertex,
+            Vertex<T> *vertex,
             long num, T data,
             unsigned long weight = 1
         ) {
@@ -57,21 +44,15 @@ namespace Ex {
     namespace AdjacencyMatrix {
 
         template<typename T>
-        struct GenericVertex {
-            std::optional<long> num;
+        struct Vertex {
+            unsigned long num{0};
             unsigned long weight{0};
             std::optional<T> data;
         };
 
-        void check_vertex(
-            std::pair<unsigned long, unsigned long> vertex, 
-            unsigned long data, 
-            unsigned long weight = 1
-        );
-
         template<typename T>
         void check_vertex(
-            GenericVertex<T> vertex,
+            Vertex<T> vertex,
             unsigned long num,
             T data,
             unsigned long weight = 1
@@ -85,22 +66,10 @@ namespace Ex {
 
     namespace AdjacencyMultiList {
 
+        template<typename T>
         struct Edge {
             Edge *headRelatedNext{nullptr};
             Edge *tailRelatedNext{nullptr};
-            std::optional<unsigned long> headVertexPosition;
-            std::optional<unsigned long> tailVertexPosition;
-            unsigned long weight{0};
-        };
-
-        struct Vertex {
-            Edge *firstEdge{nullptr};
-        };
-
-        template<typename T>
-        struct GenericEdge {
-            GenericEdge *headRelatedNext{nullptr};
-            GenericEdge *tailRelatedNext{nullptr};
             long headVertexPosition{-1};
             long tailVertexPosition{-1};
             unsigned long weight{0};
@@ -108,21 +77,15 @@ namespace Ex {
         };
 
         template<typename T>
-        struct GenericVertex {
-            GenericEdge<T> *firstEdge{nullptr};
+        struct Vertex {
+            Edge<T> *firstEdge{nullptr};
             std::optional<long> num;
             std::optional<T> data;
         };
 
-        void undirected_check_edge_data(
-            Edge *edge,
-            unsigned long position,
-            unsigned long weight = 1
-        );
-
         template<typename T>
         void undirected_check_edge_data(
-            GenericEdge<T> *edge,
+            Edge<T> *edge,
             T data,
             unsigned long position,
             unsigned long weight = 1
@@ -132,17 +95,11 @@ namespace Ex {
             assert(edge->tailVertexPosition == position);
         }
 
-        void undirected_check_edge_field(
-            Edge *edge,
-            Edge *headRelatedNext,
-            Edge *tailRelatedNext
-        );
-
         template<typename T>
         void undirected_check_edge_field(
-            GenericEdge<T> *edge,
-            GenericEdge<T> *headRelatedNext,
-            GenericEdge<T> *tailRelatedNext
+            Edge<T> *edge,
+            Edge<T> *headRelatedNext,
+            Edge<T> *tailRelatedNext
         ) {
             assert(edge->headRelatedNext == headRelatedNext);
             assert(edge->tailRelatedNext == tailRelatedNext);
@@ -152,25 +109,12 @@ namespace Ex {
 
     namespace OrthogonalList {
 
-        struct Edge {
-            Edge *headFieldNext{nullptr};
-            Edge *tailFieldNext{nullptr};
-            std::optional<long> head;
-            std::optional<long> tail;
-            unsigned long weight{0};
-        };
-
-        struct Vertex {
-            Edge *firstIn{nullptr};
-            Edge *firstOut{nullptr};
-        };
-
         template<typename T>
-        struct GenericEdge {
-            GenericEdge *headFieldPrevious{nullptr};
-            GenericEdge *headFieldNext{nullptr};
-            GenericEdge *tailFieldPrevious{nullptr};
-            GenericEdge *tailFieldNext{nullptr};
+        struct Edge {
+            Edge *headFieldPrevious{nullptr};
+            Edge *headFieldNext{nullptr};
+            Edge *tailFieldPrevious{nullptr};
+            Edge *tailFieldNext{nullptr};
             std::optional<long> headNum;
             std::optional<long> tailNum;
             unsigned long weight{0};
@@ -178,41 +122,29 @@ namespace Ex {
         };
 
         template<typename T>
-        struct GenericVertex {
-            GenericEdge<T> *firstIn{nullptr};
-            GenericEdge<T> *firstOut{nullptr};
-            GenericVertex *next{nullptr};
+        struct Vertex {
+            Edge<T> *firstIn{nullptr};
+            Edge<T> *firstOut{nullptr};
+            Vertex *next{nullptr};
             std::optional<long> num;
             std::optional<T> data;
         };
 
-        void directed_check_vertex_field(
-            std::optional<Vertex> vertex,
-            Edge *in,
-            Edge *out
-        );
-
         template<typename T>
         void directed_check_vertex_field(
-            GenericVertex<T> *vertex,
-            GenericEdge<T> *in,
-            GenericEdge<T> *out
+            Vertex<T> *vertex,
+            Edge<T> *in,
+            Edge<T> *out
         ) {
             assert(vertex->firstIn == in);
             assert(vertex->firstOut == out);
         }
 
-        void directed_check_edge_field(
-            Edge *edge,
-            Edge *nextHead,
-            Edge *nextTail
-        );
-
         template<typename T>
         void directed_check_edge_field(
-            GenericEdge<T> *neighbor,
-            GenericEdge<T> *hfp, GenericEdge<T> *hfn,
-            GenericEdge<T> *tfp, GenericEdge<T> *tfn
+            Edge<T> *neighbor,
+            Edge<T> *hfp, Edge<T> *hfn,
+            Edge<T> *tfp, Edge<T> *tfn
         ) {
             assert(neighbor->headFieldPrevious == hfp);
             assert(neighbor->headFieldNext == hfn);
@@ -220,15 +152,9 @@ namespace Ex {
             assert(neighbor->tailFieldNext == tfn);
         }
 
-        void directed_check_edge_data(
-            Edge *neighbor,
-            unsigned long num,
-            unsigned long weight = 1
-        );
-
         template<typename T>
         void directed_check_edge_data(
-            GenericEdge<T> *neighbor,
+            Edge<T> *neighbor,
             unsigned long num,
             T data,
             unsigned long weight = 1

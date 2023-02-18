@@ -14,22 +14,24 @@
 
 namespace Ex::AdjacencyMultiList {
 
-    class UnDirectedGraph {
+    template<typename T>
+    class GenericUndirectedGraph {
     public:
-        explicit UnDirectedGraph(unsigned long vertexMaxNum) : vertexMaxNum(vertexMaxNum), edgeNum(0) {
-            vertices = new Vertex[vertexMaxNum];
+        explicit GenericUndirectedGraph(unsigned long vertexMaxNum)
+                : vertexMaxNum(vertexMaxNum + 1), vertexNum(0), edgeNum(0) {
+            vertices = new Vertex<T>[this->vertexMaxNum];
         }
 
-        ~UnDirectedGraph() {
+        ~GenericUndirectedGraph() {
             for (unsigned long i = 0; i < vertexMaxNum; ++i) {
                 auto edges = vertices[i].firstEdge;
                 while (edges != nullptr && edges->headVertexPosition == i) {
                     auto e = edges;
                     edges = edges->headRelatedNext;
                     if (e->headVertexPosition == i) {
-                        auto t = vertices[e->tailVertexPosition.value()].firstEdge;
+                        auto t = vertices[e->tailVertexPosition].firstEdge;
                         if (t == e) {
-                            vertices[e->tailVertexPosition.value()].firstEdge = nullptr;
+                            vertices[e->tailVertexPosition].firstEdge = nullptr;
                         } else if (t != nullptr && t->headVertexPosition == e->tailVertexPosition) {
                             auto save = t;
                             while (t != nullptr) {
@@ -48,26 +50,59 @@ namespace Ex::AdjacencyMultiList {
             delete[]vertices;
         }
 
-        void insert_edge(unsigned long num1, unsigned long num2, unsigned long weight = 1) {
-            if (check_vertex_pair(num1, num2) && weight > 0) {
-                auto edge = new Edge;
-                edge->headVertexPosition = num1;
-                edge->tailVertexPosition = num2;
+        void insert_vertex(long num, T data) {
+            if (check_vertex(num) == -1) {
+                if (remains.empty()) {
+                    if (vertexNum < vertexMaxNum) {
+                        vertices[vertexNum].num = num;
+                        vertices[vertexNum].data = data;
+                        vertexNum++;
+                    }
+                } else {
+                    auto f = *remains.begin();
+                    vertices[f].num = num;
+                    vertices[f].data = data;
+                    remains.erase(f);
+                    vertexNum++;
+                }
+            }
+        }
+
+        void insert_edge(long num1, long num2, unsigned long weight = 1) {
+            long v1 = -1;
+            long v2 = -1;
+            for (long i = 0; i < vertexMaxNum; ++i) {
+                if (vertices[i].num == num1) {
+                    v1 = i;
+                }
+                if (vertices[i].num == num2) {
+                    v2 = i;
+                }
+                if (v1 != -1 && v2 != -1) {
+                    break;
+                }
+            }
+
+            if (v1 != -1 && v2 != -1 && weight > 0) {
+                auto edge = new Edge<T>;
+                edge->headVertexPosition = v1;
+                edge->tailVertexPosition = v2;
+                edge->tailData = vertices[v2].data;
                 edge->weight = weight;
 
-                if (vertices[num1].firstEdge == nullptr) {
-                    vertices[num1].firstEdge = edge;
+                if (vertices[v1].firstEdge == nullptr) {
+                    vertices[v1].firstEdge = edge;
                 } else {
-                    auto vertexRelated = vertices[num1].firstEdge;
+                    auto vertexRelated = vertices[v1].firstEdge;
                     auto save = vertexRelated;
                     auto ht = true;
                     while (vertexRelated != nullptr) {
-                        if (vertexRelated->tailVertexPosition == num2 || vertexRelated->headVertexPosition == num2) {
+                        if (vertexRelated->tailVertexPosition == v2 || vertexRelated->headVertexPosition == v2) {
                             delete edge;
                             return;
                         }
                         save = vertexRelated;
-                        if (vertexRelated->headVertexPosition == num1) {
+                        if (vertexRelated->headVertexPosition == v1) {
                             vertexRelated = vertexRelated->headRelatedNext;
                             ht = true;
                         } else {
@@ -87,15 +122,15 @@ namespace Ex::AdjacencyMultiList {
                     return;
                 }
 
-                if (vertices[num2].firstEdge == nullptr) {
-                    vertices[num2].firstEdge = edge;
+                if (vertices[v2].firstEdge == nullptr) {
+                    vertices[v2].firstEdge = edge;
                 } else {
-                    auto vertexRelated = vertices[num2].firstEdge;
+                    auto vertexRelated = vertices[v2].firstEdge;
                     auto save = vertexRelated;
                     auto t = true;
                     while (vertexRelated != nullptr) {
                         save = vertexRelated;
-                        if (vertexRelated->tailVertexPosition == num2) {
+                        if (vertexRelated->tailVertexPosition == v2) {
                             vertexRelated = vertexRelated->tailRelatedNext;
                             t = true;
                         } else {
@@ -114,32 +149,129 @@ namespace Ex::AdjacencyMultiList {
             }
         }
 
-        void remove_edge(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2)) {
-                auto vertexRelated = vertices[num1].firstEdge;
-                if (vertexRelated->headVertexPosition != num1) {
-                    auto tmp = num1;
-                    num1 = num2;
-                    num2 = tmp;
+        void remove_vertex(long num) {
+            auto index = check_vertex(num);
+            if (index != -1) {
+                auto edges = vertices[index].firstEdge;
+                while (edges != nullptr) {
+                    auto e = edges;
+                    if (e->headVertexPosition == index) {
+                        edges = edges->headRelatedNext;
+                        auto t = vertices[e->tailVertexPosition].firstEdge;
+                        if (t == e) {
+                            vertices[e->tailVertexPosition].firstEdge = t->tailRelatedNext;
+                        } else {
+                            auto save = t;
+                            auto tn = true;
+                            while (t != nullptr) {
+                                if (t == e) {
+                                    if (tn) {
+                                        save->tailRelatedNext = t->tailRelatedNext;
+                                        break;
+                                    } else {
+                                        save->headRelatedNext = t->headRelatedNext;
+                                        break;
+                                    }
+                                }
+                                save = t;
+                                if (t->headVertexPosition != e->tailVertexPosition) {
+                                    t = t->tailRelatedNext;
+                                    tn = true;
+                                } else {
+                                    t = t->headRelatedNext;
+                                    tn = false;
+                                }
+                            }
+                        }
+                        delete e;
+                        edgeNum--;
+                    } else if (e->tailVertexPosition == index) {
+                        edges = edges->tailRelatedNext;
+                        auto h = vertices[e->headVertexPosition].firstEdge;
+                        auto ht = h->headVertexPosition == e->headVertexPosition;
+                        if (h == e) {
+                            if (ht) {
+                                vertices[e->headVertexPosition].firstEdge = h->headRelatedNext;
+                            } else {
+                                vertices[e->headVertexPosition].firstEdge = h->tailRelatedNext;
+                            }
+                        } else {
+                            auto save = h;
+                            while (h != nullptr) {
+                                if (h == e) {
+                                    if (ht) {
+                                        save->headRelatedNext = e->headRelatedNext;
+                                        break;
+                                    } else {
+                                        save->tailRelatedNext = e->tailRelatedNext;
+                                        break;
+                                    }
+                                }
+                                save = h;
+                                if (h->tailVertexPosition != e->headVertexPosition) {
+                                    h = h->headRelatedNext;
+                                    ht = true;
+                                } else {
+                                    h = h->tailRelatedNext;
+                                    ht = false;
+                                }
+                            }
+                        }
+                        delete e;
+                        edgeNum--;
+                    } else {
+                        break;
+                    }
+                }
+                vertices[index].num = std::optional<long>();
+                vertices[index].data = std::optional<T>();
+                vertices[index].firstEdge = nullptr;
+                vertexNum--;
+
+                remains.insert(index);
+            }
+        }
+
+        void remove_edge(long num1, long num2) {
+            long v1 = -1;
+            long v2 = -1;
+            for (long i = 0; i < vertexMaxNum; ++i) {
+                if (vertices[i].num == num1) {
+                    v1 = i;
+                }
+                if (vertices[i].num == num2) {
+                    v2 = i;
+                }
+                if (v1 != -1 && v2 != -1) {
+                    break;
+                }
+            }
+
+            if (v1 != -1 && v2 != -1) {
+                auto vertexRelated = vertices[v1].firstEdge;
+                if (vertexRelated->headVertexPosition != v1) {
+                    auto tmp = v1;
+                    v1 = v2;
+                    v2 = tmp;
                 }
                 auto findIt = false;
-                if (vertexRelated->tailVertexPosition == num2) {
-                    vertices[num1].firstEdge = vertexRelated->headRelatedNext;
+                if (vertexRelated->tailVertexPosition == v2) {
+                    vertices[v1].firstEdge = vertexRelated->headRelatedNext;
                     findIt = true;
                 } else {
                     auto save = vertexRelated;
                     while (vertexRelated != nullptr) {
-                        if (vertexRelated->headVertexPosition == num2) {
+                        if (vertexRelated->headVertexPosition == v2) {
                             findIt = true;
                             save->headRelatedNext = vertexRelated->tailRelatedNext;
                             break;
-                        } else if (vertexRelated->tailVertexPosition == num2) {
+                        } else if (vertexRelated->tailVertexPosition == v2) {
                             findIt = true;
                             save->headRelatedNext = vertexRelated->headRelatedNext;
                             break;
                         }
                         save = vertexRelated;
-                        if (vertexRelated->headVertexPosition == num1) {
+                        if (vertexRelated->headVertexPosition == v1) {
                             vertexRelated = vertexRelated->headRelatedNext;
                         } else {
                             vertexRelated = vertexRelated->tailRelatedNext;
@@ -148,13 +280,13 @@ namespace Ex::AdjacencyMultiList {
 
                 }
                 if (findIt) {
-                    auto t = vertices[num2].firstEdge;
-                    auto ht = t->headVertexPosition == num2;
+                    auto t = vertices[v2].firstEdge;
+                    auto ht = t->headVertexPosition == v2;
                     if (t == vertexRelated) {
                         if (ht) {
-                            vertices[num2].firstEdge = t->headRelatedNext;
+                            vertices[v2].firstEdge = t->headRelatedNext;
                         } else {
-                            vertices[num2].firstEdge = t->tailRelatedNext;
+                            vertices[v2].firstEdge = t->tailRelatedNext;
                         }
                     } else {
                         auto save = t;
@@ -169,7 +301,7 @@ namespace Ex::AdjacencyMultiList {
                                 }
                             }
                             save = t;
-                            if (t->headVertexPosition == num2) {
+                            if (t->headVertexPosition == v2) {
                                 t = t->headRelatedNext;
                                 ht = true;
                             } else {
@@ -185,24 +317,40 @@ namespace Ex::AdjacencyMultiList {
             }
         }
 
-        auto vertex_neighbors(long num) {
-            std::vector<Edge *> neighbors{};
-            if (check_vertex(num)) {
-                auto edges = vertices[num].firstEdge;
+        std::vector<Edge < T>*>
+
+        vertex_neighbors(long num) {
+            std::vector<Edge<T> *> neighbors{};
+            auto index = check_vertex(num);
+            if (index != -1) {
+                auto edges = vertices[index].firstEdge;
                 while (edges != nullptr) {
                     neighbors.push_back(edges);
-                    if (edges->headVertexPosition == num) {
+                    if (edges->headVertexPosition == index) {
                         edges = edges->headRelatedNext;
                     } else {
                         edges = edges->tailRelatedNext;
                     }
                 }
             }
+
             return neighbors;
         }
 
+        auto is_vertex_exist(long num) {
+            return check_vertex(num) != -1;
+        }
+
+        auto vertex_position(long num) {
+            return check_vertex(num);
+        }
+
         auto get_vertexMaxNum() {
-            return vertexMaxNum;
+            return vertexMaxNum - 1;
+        }
+
+        auto get_vertexNum() {
+            return vertexNum;
         }
 
         auto get_edgeNum() {
@@ -210,16 +358,19 @@ namespace Ex::AdjacencyMultiList {
         }
 
     private:
-        bool check_vertex(unsigned long num) {
-            return num < vertexMaxNum;
+        long check_vertex(long num) {
+            for (long i = 0; i < vertexMaxNum; ++i) {
+                if (vertices[i].num == num) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
-        bool check_vertex_pair(unsigned long num1, unsigned long num2) {
-            return check_vertex(num1) && check_vertex(num2);
-        }
-
-        Vertex *vertices;
+        Vertex<T> *vertices;
+        std::set<unsigned long> remains{};
         unsigned long vertexMaxNum;
+        unsigned long vertexNum;
         unsigned long edgeNum;
     };
 

@@ -20,16 +20,16 @@ void Ex::AdjacencyList::undirected_graph_test() {
 }
 
 void adjacency_list_undirected_graph_unweighted() {
-    UnDirectedGraph graph{8};
+    UnDirectedGraph<std::string_view> graph{8};
     assert(graph.get_vertexMaxNum() == 8);
 
-    graph.insert_edge(1, 5);
-    graph.insert_edge(3, 2);
-    graph.insert_edge(1, 3);
-    graph.insert_edge(2, 5);
-    graph.insert_edge(0, 1);
-    graph.insert_edge(6, 0);
-    graph.insert_edge(6, 6);
+    graph.insert_edge(1, "1", 5, "5");
+    graph.insert_edge(3, "3", 2, "2");
+    graph.insert_edge(1, "1", 3, "3");
+    graph.insert_edge(2, "2", 5, "5");
+    graph.insert_edge(0, "0", 1, "1");
+    graph.insert_edge(6, "6", 0, "0");
+    graph.insert_edge(6, "6", 6, "6");
 
     assert(graph.is_edge_exist(5, 1));
     assert(graph.is_edge_exist(2, 3));
@@ -43,29 +43,29 @@ void adjacency_list_undirected_graph_unweighted() {
 
     auto neighbors = graph.vertex_neighbors(0);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 1);
-    check_vertex(neighbors[1], 6);
+    check_vertex<std::string_view>(neighbors[0], 1, "1");
+    check_vertex<std::string_view>(neighbors[1], 6, "6");
     neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 3);
-    check_vertex(neighbors[0], 5);
-    check_vertex(neighbors[1], 3);
-    check_vertex(neighbors[2], 0);
+    check_vertex<std::string_view>(neighbors[0], 5, "5");
+    check_vertex<std::string_view>(neighbors[1], 3, "3");
+    check_vertex<std::string_view>(neighbors[2], 0, "0");
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 3);
-    check_vertex(neighbors[1], 5);
+    check_vertex<std::string_view>(neighbors[0], 3, "3");
+    check_vertex<std::string_view>(neighbors[1], 5, "5");
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 2);
-    check_vertex(neighbors[1], 1);
+    check_vertex<std::string_view>(neighbors[0], 2, "2");
+    check_vertex<std::string_view>(neighbors[1], 1, "1");
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 1);
-    check_vertex(neighbors[1], 2);
+    check_vertex<std::string_view>(neighbors[0], 1, "1");
+    check_vertex<std::string_view>(neighbors[1], 2, "2");
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 0);
-    check_vertex(neighbors[1], 6);
+    check_vertex<std::string_view>(neighbors[0], 0, "0");
+    check_vertex<std::string_view>(neighbors[1], 6, "6");
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.empty());
 
@@ -79,43 +79,58 @@ void adjacency_list_undirected_graph_unweighted() {
     neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 1);
     assert(graph.get_edgeNum() == 4);
+
+    graph.insert_vertex(7, "7");
+    assert(graph.is_vertex_exist(7));
+    graph.insert_edge(7, "7", 0, "0");
+    assert(graph.get_edgeNum() == 5);
+    neighbors = graph.vertex_neighbors(7);
+    check_vertex<std::string_view>(neighbors[0], 0, "0");
+    neighbors = graph.vertex_neighbors(0);
+    check_vertex<std::string_view>(neighbors[1], 7, "7");
+    graph.remove_vertex(7);
+    neighbors = graph.vertex_neighbors(7);
+    assert(neighbors.empty());
+    neighbors = graph.vertex_neighbors(0);
+    assert(neighbors.size() == 1);
+    assert(graph.get_edgeNum() == 4);
 }
 
 void adjacency_list_undirected_graph_weighted() {
-    UnDirectedGraph graph{8};
-    graph.insert_edge(1, 5, 2);
-    graph.insert_edge(3, 2, 3);
-    graph.insert_edge(1, 3, 1);
-    graph.insert_edge(2, 5, 4);
-    graph.insert_edge(0, 1, 1);
-    graph.insert_edge(6, 0, 5);
-    graph.insert_edge(6, 6, 1);
+    UnDirectedGraph<std::string_view> graph{8};
+    graph.insert_edge(1, "1", 5, "5", 2);
+    graph.insert_edge(3, "3", 2, "2", 3);
+    graph.insert_edge(1, "1", 3, "3", 1);
+    graph.insert_edge(2, "2", 5, "5", 4);
+    graph.insert_edge(0, "0", 1, "1", 1);
+    graph.insert_edge(6, "6", 0, "0", 5);
+    graph.insert_edge(6, "6", 6, "6", 1);
 
     auto neighbors = graph.vertex_neighbors(0);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 1, 1);
-    check_vertex(neighbors[1], 6, 5);
+    check_vertex<std::string_view>(neighbors[0], 1, "1", 1);
+    check_vertex<std::string_view>(neighbors[1], 6, "6", 5);
     neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 3);
-    check_vertex(neighbors[0], 5, 2);
-    check_vertex(neighbors[1], 3, 1);
-    check_vertex(neighbors[2], 0, 1);
+    check_vertex<std::string_view>(neighbors[0], 5, "5", 2);
+    check_vertex<std::string_view>(neighbors[1], 3, "3", 1);
+    check_vertex<std::string_view>(neighbors[2], 0, "0", 1);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 3, 3);
-    check_vertex(neighbors[1], 5, 4);
+    check_vertex<std::string_view>(neighbors[0], 3, "3", 3);
+    check_vertex<std::string_view>(neighbors[1], 5, "5", 4);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 2, 3);
-    check_vertex(neighbors[1], 1, 1);
+    check_vertex<std::string_view>(neighbors[0], 2, "2", 3);
+    check_vertex<std::string_view>(neighbors[1], 1, "1", 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 1, 2);
-    check_vertex(neighbors[1], 2, 4);
+    check_vertex<std::string_view>(neighbors[0], 1, "1", 2);
+    check_vertex<std::string_view>(neighbors[1], 2, "2", 4);
     neighbors = graph.vertex_neighbors(6);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 0, 5);
-    check_vertex(neighbors[1], 6, 1);
+    check_vertex<std::string_view>(neighbors[0], 0, "0", 5);
+    check_vertex<std::string_view>(neighbors[1], 6, "6", 1);
     neighbors = graph.vertex_neighbors(7);
     assert(neighbors.empty());
 }

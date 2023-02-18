@@ -51,20 +51,14 @@
 
 - adjacency list
   - directed graph
-  - generic directed graph
   - undirected graph
-  - generic undirected graph
 - adjacency matrix
   - directed graph
-  - generic directed graph
   - undirected graph
-  - generic undirected graph
 - adjacency multi list
   - undirected graph
-  - generic undirected graph
 - orthogonal list
   - directed graph
-  - generic directed graph
 
 ### sort 排序
 

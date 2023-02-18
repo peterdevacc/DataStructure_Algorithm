@@ -20,96 +20,125 @@ void Ex::AdjacencyMatrix::directed_graph_test() {
 }
 
 void adjacency_matrix_directed_graph_unweighted() {
-    DirectedGraph graph{8};
-    assert(graph.get_vertexMaxNum() == 8);
+    DirectedGraph<std::string> graph{10};
+    assert(graph.get_vertexMaxNum() == 10);
 
+    graph.insert_vertex(1, "A");
+    graph.insert_vertex(1, "A");
+    graph.insert_vertex(3, "C");
+    graph.insert_vertex(2, "B");
+    graph.insert_vertex(5, "E");
+    graph.insert_vertex(6, "F");
+    graph.insert_vertex(7, "G");
+
+    assert(graph.is_vertex_exist(1));
+    assert(graph.is_vertex_exist(2));
+    assert(graph.is_vertex_exist(3));
+    assert(graph.is_vertex_exist(5));
+    assert(graph.is_vertex_exist(6));
+    assert(graph.is_vertex_exist(7));
+    assert(graph.get_vertexNum() == 6);
+
+    graph.insert_edge(1, 6);
+    graph.insert_edge(1, 6);
     graph.insert_edge(1, 5);
-    graph.insert_edge(3, 2);
-    graph.insert_edge(1, 3);
-    graph.insert_edge(2, 5);
-    graph.insert_edge(0, 1);
-    graph.insert_edge(6, 0);
-    graph.insert_edge(6, 6);
+    graph.insert_edge(3, 6);
+    graph.insert_edge(6, 5);
+    graph.insert_edge(2, 7);
+    graph.insert_edge(7, 7);
 
+    assert(graph.is_edge_exist(1, 6));
+    assert(!graph.is_edge_exist(6, 1));
     assert(graph.is_edge_exist(1, 5));
     assert(!graph.is_edge_exist(5, 1));
-    assert(graph.is_edge_exist(3, 2));
-    assert(!graph.is_edge_exist(2, 3));
-    assert(graph.is_edge_exist(1, 3));
-    assert(!graph.is_edge_exist(3, 1));
-    assert(graph.is_edge_exist(2, 5));
-    assert(!graph.is_edge_exist(5, 2));
-    assert(graph.is_edge_exist(0, 1));
-    assert(!graph.is_edge_exist(1, 0));
-    assert(graph.is_edge_exist(6, 0));
-    assert(graph.is_edge_exist(6, 6));
-    assert(!graph.is_edge_exist(0, 6));
-    assert(!graph.is_edge_exist(1, 7));
-    assert(graph.get_edgeNums() == 7);
+    assert(graph.is_edge_exist(3, 6));
+    assert(!graph.is_edge_exist(6, 3));
+    assert(graph.is_edge_exist(6, 5));
+    assert(!graph.is_edge_exist(5, 6));
+    assert(graph.is_edge_exist(2, 7));
+    assert(!graph.is_edge_exist(7, 2));
+    assert(graph.is_edge_exist(7, 7));
+    assert(graph.get_edgeNum() == 6);
 
-    auto neighbors = graph.vertex_neighbors(0);
-    assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 1);
-    neighbors = graph.vertex_neighbors(1);
+    auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 3);
-    check_vertex(neighbors[1], 5);
+    check_vertex<std::string>(neighbors[0], 5, "E");
+    check_vertex<std::string>(neighbors[1], 6, "F");
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 5);
+    check_vertex<std::string>(neighbors[0], 7, "G");
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 2);
+    check_vertex<std::string>(neighbors[0], 6, "F");
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.empty());
     neighbors = graph.vertex_neighbors(6);
-    assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 0);
-    check_vertex(neighbors[1], 6);
+    assert(neighbors.size() == 1);
+    check_vertex<std::string>(neighbors[0], 5, "E");
     neighbors = graph.vertex_neighbors(7);
-    assert(neighbors.empty());
+    assert(neighbors.size() == 1);
+    check_vertex<std::string>(neighbors[0], 7, "G");
 
-    graph.remove_edge(1, 3);
-    assert(!graph.is_edge_exist(1, 3));
-    graph.remove_edge(6, 0);
-    assert(!graph.is_edge_exist(6, 0));
-    graph.remove_edge(1, 5);
+    graph.remove_vertex(1);
+    assert(!graph.is_vertex_exist(1));
     assert(!graph.is_edge_exist(1, 5));
+    assert(!graph.is_edge_exist(1, 6));
+    assert(graph.get_vertexNum() == 5);
+    assert(graph.get_edgeNum() == 4);
 
-    neighbors = graph.vertex_neighbors(1);
-    assert(neighbors.empty());
-    assert(graph.get_edgeNums() == 4);
+    graph.remove_edge(3, 6);
+    assert(!graph.is_edge_exist(3, 6));
+    assert(graph.get_edgeNum() == 3);
+
+    graph.insert_edge(9, "9", 8, "8");
+    assert(graph.get_edgeNum() == 4);
+    assert(graph.is_edge_exist(9, 8));
+    assert(!graph.is_edge_exist(8, 9));
+    graph.remove_edge(9, 8);
+    assert(graph.is_vertex_exist(9));
+    assert(graph.is_vertex_exist(8));
+    assert(!graph.is_edge_exist(9, 8));
+    graph.remove_vertex(9);
+    assert(!graph.is_vertex_exist(9));
+    graph.remove_vertex(8);
+    assert(!graph.is_vertex_exist(8));
+    assert(graph.get_edgeNum() == 3);
 }
 
 void adjacency_matrix_directed_graph_weighted() {
-    DirectedGraph graph{8};
-    graph.insert_edge(1, 5, 2);
-    graph.insert_edge(3, 2, 1);
-    graph.insert_edge(1, 3, 4);
-    graph.insert_edge(2, 5, 3);
-    graph.insert_edge(0, 1, 1);
-    graph.insert_edge(6, 0, 5);
-    graph.insert_edge(6, 6, 1);
+    DirectedGraph<std::string> graph{8};
+    graph.insert_vertex(1, "A");
+    graph.insert_vertex(1, "A");
+    graph.insert_vertex(3, "C");
+    graph.insert_vertex(2, "B");
+    graph.insert_vertex(5, "E");
+    graph.insert_vertex(6, "F");
+    graph.insert_vertex(7, "G");
 
-    auto neighbors = graph.vertex_neighbors(0);
-    assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 1, 1);
-    neighbors = graph.vertex_neighbors(1);
+    graph.insert_edge(1, 6, 4);
+    graph.insert_edge(1, 6, 4);
+    graph.insert_edge(1, 5, 2);
+    graph.insert_edge(3, 6, 1);
+    graph.insert_edge(6, 5, 2);
+    graph.insert_edge(2, 7, 5);
+    graph.insert_edge(7, 7, 1);
+
+    auto neighbors = graph.vertex_neighbors(1);
     assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 3, 4);
-    check_vertex(neighbors[1], 5, 2);
+    check_vertex<std::string>(neighbors[0], 5, "E", 2);
+    check_vertex<std::string>(neighbors[1], 6, "F", 4);
     neighbors = graph.vertex_neighbors(2);
     assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 5, 3);
+    check_vertex<std::string>(neighbors[0], 7, "G", 5);
     neighbors = graph.vertex_neighbors(3);
     assert(neighbors.size() == 1);
-    check_vertex(neighbors[0], 2, 1);
+    check_vertex<std::string>(neighbors[0], 6, "F", 1);
     neighbors = graph.vertex_neighbors(5);
     assert(neighbors.empty());
     neighbors = graph.vertex_neighbors(6);
-    assert(neighbors.size() == 2);
-    check_vertex(neighbors[0], 0, 5);
-    check_vertex(neighbors[1], 6, 1);
+    assert(neighbors.size() == 1);
+    check_vertex<std::string>(neighbors[0], 5, "E", 2);
     neighbors = graph.vertex_neighbors(7);
-    assert(neighbors.empty());
+    assert(neighbors.size() == 1);
+    check_vertex<std::string>(neighbors[0], 7, "G", 1);
 }

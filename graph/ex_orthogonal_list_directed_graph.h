@@ -14,39 +14,68 @@
 
 namespace Ex::OrthogonalList {
 
+    template<typename T>
     class DirectedGraph {
     public:
-        explicit DirectedGraph(unsigned long vertexMaxNum)
-                : vertexMaxNum(vertexMaxNum), edgeNum(0) {
-            vertices = new Vertex[vertexMaxNum];
-        }
+        DirectedGraph() : vertices(nullptr), vertexNum(0), edgeNum(0) {}
 
         ~DirectedGraph() {
-            for (unsigned long i = 0; i < vertexMaxNum; ++i) {
-                auto edges = vertices[i].firstIn;
+            while (vertices != nullptr) {
+                auto v = vertices;
+                auto edges = v->firstIn;
                 while (edges != nullptr) {
                     auto e = edges;
                     edges = edges->headFieldNext;
                     delete e;
                 }
+                vertices = vertices->next;
+                delete v;
             }
-            delete[]vertices;
         }
 
-        void insert_edge(unsigned long num1, unsigned long num2, unsigned long weight = 1) {
-            if (check_vertex_pair(num1, num2) && weight > 0) {
-                auto edge = new Edge;
-                edge->head = num1;
-                edge->tail = num2;
-                edge->weight = weight;
+        void insert_vertex(long num, T data) {
+            auto vertex = new Vertex<T>;
+            vertex->num = num;
+            vertex->data = data;
 
-                if (vertices[num1].firstIn == nullptr) {
-                    vertices[num1].firstIn = edge;
+            if (vertices == nullptr) {
+                vertices = vertex;
+            } else {
+                auto pos = vertices;
+                auto save = pos;
+                while (pos != nullptr) {
+                    if (pos->num == num) {
+                        delete vertex;
+                        return;
+                    }
+                    save = pos;
+                    pos = pos->next;
+                }
+                save->next = vertex;
+            }
+
+            vertexNum++;
+        }
+
+        void insert_edge(long num1, long num2, unsigned long weight = 1) {
+            auto vp = check_vertex_pair(num1, num2);
+            Vertex<T> *v1 = vp.first;
+            Vertex<T> *v2 = vp.second;
+
+            if (v1 != nullptr && v2 != nullptr) {
+                auto edge = new Edge<T>;
+                edge->headNum = num1;
+                edge->tailNum = num2;
+                edge->weight = weight;
+                edge->tailData = v2->data;
+
+                if (v1->firstIn == nullptr) {
+                    v1->firstIn = edge;
                 } else {
-                    auto pos = vertices[num1].firstIn;
+                    auto pos = v1->firstIn;
                     auto save = pos;
                     while (pos != nullptr) {
-                        if (pos->tail == num2) {
+                        if (pos->tailNum == num2) {
                             delete edge;
                             return;
                         }
@@ -54,65 +83,153 @@ namespace Ex::OrthogonalList {
                         pos = pos->headFieldNext;
                     }
                     save->headFieldNext = edge;
+                    edge->headFieldPrevious = save;
                 }
 
-                if (vertices[num2].firstOut == nullptr) {
-                    vertices[num2].firstOut = edge;
+                if (v2->firstOut == nullptr) {
+                    v2->firstOut = edge;
                 } else {
-                    auto pos = vertices[num2].firstOut;
+                    auto pos = v2->firstOut;
                     auto save = pos;
                     while (pos != nullptr) {
                         save = pos;
                         pos = pos->tailFieldNext;
                     }
                     save->tailFieldNext = edge;
+                    edge->tailFieldPrevious = save;
                 }
 
                 edgeNum++;
             }
         }
 
-        void remove_edge(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2) && edgeNum > 0) {
-                if (vertices[num2].firstOut->head == num1) {
-                    vertices[num2].firstOut = vertices[num2].firstOut->tailFieldNext;
-                } else {
-                    auto pos = vertices[num2].firstOut;
-                    auto save = pos;
-                    while (pos != nullptr) {
-                        if (pos->head == num1) {
-                            save->tailFieldNext = pos->tailFieldNext;
+        void remove_vertex(long num) {
+            auto pos = vertices;
+            auto save = pos;
+            while (pos != nullptr) {
+                if (pos->num == num) {
+                    auto in = pos->firstIn;
+                    while (in != nullptr) {
+                        auto dIn = in;
+                        if (dIn->tailFieldPrevious != nullptr) {
+                            dIn->tailFieldPrevious->tailFieldNext = dIn->tailFieldNext;
+                            if (dIn->tailFieldNext != nullptr) {
+                                dIn->tailFieldNext->tailFieldPrevious = dIn->tailFieldPrevious;
+                            }
+                        } else {
+                            auto t = get_vertex(dIn->tailNum.value());
+                            if (t->firstOut == dIn) {
+                                t->firstOut = dIn->tailFieldNext;
+                                if (t->firstOut != nullptr) {
+                                    t->firstOut->tailFieldPrevious = nullptr;
+                                }
+                            }
                         }
-                        pos = pos->tailFieldNext;
-                    }
-                }
 
-                if (vertices[num1].firstIn->tail == num2) {
-                    auto dE = vertices[num1].firstIn;
-                    vertices[num1].firstIn = vertices[num1].firstIn->headFieldNext;
-                    delete dE;
-                    edgeNum--;
-                } else {
-                    auto pos = vertices[num1].firstIn;
-                    auto save = pos;
-                    while (pos != nullptr) {
-                        if (pos->tail == num2) {
-                            save->headFieldNext = pos->headFieldNext;
-                            delete pos;
-                            edgeNum--;
-                            return;
-                        }
-                        save = pos;
-                        pos = pos->headFieldNext;
+                        in = in->headFieldNext;
+                        delete dIn;
+                        edgeNum--;
                     }
+
+                    auto out = pos->firstOut;
+                    while (out != nullptr) {
+                        auto dOut = out;
+                        if (dOut->headFieldPrevious != nullptr) {
+                            dOut->headFieldPrevious->headFieldNext = dOut->headFieldNext;
+                            if (dOut->headFieldNext != nullptr) {
+                                dOut->headFieldNext->headFieldPrevious = dOut->headFieldPrevious;
+                            }
+                        } else {
+                            auto h = get_vertex(dOut->headNum.value());
+                            if (h->firstIn == dOut) {
+                                h->firstIn = dOut->headFieldNext;
+                                if (h->firstIn != nullptr) {
+                                    h->firstIn->headFieldPrevious = nullptr;
+                                }
+                            }
+                        }
+
+                        out = out->tailFieldNext;
+                        delete dOut;
+                        edgeNum--;
+                    }
+
+                    if (save == vertices) {
+                        vertices = vertices->next;
+                    } else {
+                        save->next = pos->next;
+                    }
+                    delete pos;
+                    vertexNum--;
+                    break;
+                }
+                save = pos;
+                pos = pos->next;
+            }
+        }
+
+        void remove_edge(long num1, long num2) {
+            auto vp = check_vertex_pair(num1, num2);
+            Vertex<T> *v1 = vp.first;
+            Vertex<T> *v2 = vp.second;
+
+            if (v1 != nullptr && v2 != nullptr) {
+                auto in = v1->firstIn;
+                while (in != nullptr) {
+                    if (in->tailNum == num2) {
+                        if (in->tailFieldPrevious != nullptr) {
+                            in->tailFieldPrevious->tailFieldNext = in->tailFieldNext;
+                            if (in->tailFieldNext != nullptr) {
+                                in->tailFieldNext->tailFieldPrevious = in->tailFieldPrevious;
+                            }
+                        } else {
+                            if (v2->firstOut == in) {
+                                v2->firstOut = in->tailFieldNext;
+                                if (v2->firstOut != nullptr) {
+                                    v2->firstOut->tailFieldPrevious = nullptr;
+                                }
+                            }
+                        }
+
+                        if (in->headFieldPrevious != nullptr) {
+                            in->headFieldPrevious->headFieldNext = in->headFieldNext;
+                            if (in->headFieldNext != nullptr) {
+                                in->headFieldNext->headFieldPrevious = in->headFieldPrevious;
+                            }
+                        } else {
+                            if (v1->firstIn == in) {
+                                v1->firstIn = in->headFieldNext;
+                                if (v1->firstIn != nullptr) {
+                                    v1->firstIn->headFieldPrevious = nullptr;
+                                }
+                            }
+                        }
+
+                        delete in;
+                        edgeNum--;
+                        return;
+                    }
+                    in = in->headFieldNext;
                 }
             }
         }
 
-        auto vertex_neighbors(unsigned long num) {
-            std::vector<Edge *> neighbors{};
-            if (check_vertex(num)) {
-                auto edges = vertices[num].firstIn;
+        Vertex<T> *get_vertex(long num) {
+            auto pos = vertices;
+            while (pos != nullptr) {
+                if (pos->num == num) {
+                    return pos;
+                }
+                pos = pos->next;
+            }
+            return nullptr;
+        }
+
+        auto vertex_neighbors(long num) {
+            std::vector<Edge<T> *> neighbors{};
+            auto vertex = get_vertex(num);
+            if (vertex != nullptr) {
+                auto edges = vertex->firstIn;
                 while (edges != nullptr) {
                     neighbors.push_back(edges);
                     edges = edges->headFieldNext;
@@ -122,15 +239,8 @@ namespace Ex::OrthogonalList {
             return neighbors;
         }
 
-        std::optional<Vertex> get_vertex(unsigned long num) {
-            if (check_vertex(num)) {
-                return vertices[num];
-            }
-            return std::optional<Vertex>();
-        }
-
-        auto get_vertexMaxNum() {
-            return vertexMaxNum;
+        auto get_vertexNum() {
+            return vertexNum;
         }
 
         auto get_edgeNum() {
@@ -138,16 +248,30 @@ namespace Ex::OrthogonalList {
         }
 
     private:
-        bool check_vertex(unsigned long num) {
-            return num >= 0 && num < vertexMaxNum;
+        std::pair<Vertex<T> *, Vertex<T> *> check_vertex_pair(long num1, long num2) {
+            auto vp = std::make_pair<Vertex<T> *, Vertex<T> *>(nullptr, nullptr);
+            Vertex<T> *v1 = nullptr;
+            Vertex<T> *v2 = nullptr;
+            auto v = vertices;
+            while (v != nullptr) {
+                if (v->num == num1) {
+                    v1 = v;
+                }
+                if (v->num == num2) {
+                    v2 = v;
+                }
+                if (v1 != nullptr && v2 != nullptr) {
+                    break;
+                }
+                v = v->next;
+            }
+            vp.first = v1;
+            vp.second = v2;
+            return vp;
         }
 
-        bool check_vertex_pair(unsigned long num1, unsigned long num2) {
-            return check_vertex(num1) && check_vertex(num2);
-        }
-
-        Vertex *vertices;
-        unsigned long vertexMaxNum;
+        Vertex<T> *vertices;
+        unsigned long vertexNum;
         unsigned long edgeNum;
     };
 

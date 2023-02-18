@@ -14,12 +14,12 @@
 
 namespace Ex::AdjacencyList {
 
+    template<typename T>
     class UnDirectedGraph {
     public:
-        explicit UnDirectedGraph(unsigned long vertexMaxNum)
-                : vertexMaxNum(vertexMaxNum), edgeNum(0) {
-            vertices = new Vertex *[vertexMaxNum];
-            for (unsigned long i = 0; i < vertexMaxNum; ++i) {
+        explicit UnDirectedGraph(unsigned long vertexMaxNum) : vertexMaxNum(vertexMaxNum + 1), edgeNum(0) {
+            vertices = new Vertex<T> *[this->vertexMaxNum];
+            for (unsigned long i = 0; i < this->vertexMaxNum; ++i) {
                 vertices[i] = nullptr;
             }
         }
@@ -36,16 +36,19 @@ namespace Ex::AdjacencyList {
             delete[]vertices;
         }
 
-        void insert_edge(unsigned long num1, unsigned long num2, unsigned long weight = 1) {
-            if (check_vertex_pair(num1, num2) && weight > 0) {
+        void insert_edge(
+            unsigned long num1, T data1, unsigned long num2, T data2,
+            unsigned long weight = 1
+        ) {
+            if (verify_vertex_pair(num1, num2) && weight > 0) {
                 bool existOne;
                 bool existTwo;
                 if (num1 == num2) {
-                    existOne = insert_direction(num1, num2, weight);
+                    existOne = insert_direction(num1, data1, num2, data2, weight);
                     existTwo = existOne;
                 } else {
-                    existOne = insert_direction(num1, num2, weight);
-                    existTwo = insert_direction(num2, num1, weight);
+                    existOne = insert_direction(num1, data1, num2, data2, weight);
+                    existTwo = insert_direction(num2, data2, num1, data1, weight);
                 }
 
                 if (!existOne || !existTwo) {
@@ -55,39 +58,97 @@ namespace Ex::AdjacencyList {
         }
 
         void remove_edge(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2) && edgeNum > 0) {
-                bool existOne;
-                bool existTwo;
+            if (verify_vertex_pair(num1, num2) && edgeNum > 0) {
+                bool resultOne;
+                bool resultTwo;
                 if (num1 == num2) {
-                    existOne = remove_direction(num1, num2);
-                    existTwo = existOne;
+                    resultOne = remove_direction(num1, num2);
+                    resultTwo = resultOne;
                 } else {
-                    existOne = remove_direction(num1, num2);
-                    existTwo = remove_direction(num2, num1);
+                    resultOne = remove_direction(num1, num2);
+                    resultTwo = remove_direction(num2, num1);
                 }
 
-                if (existOne || existTwo) {
+                if (resultOne && resultTwo) {
                     edgeNum--;
                 }
             }
         }
 
-        auto vertex_neighbors(unsigned long num) {
-            std::vector<Vertex *> neighbors{};
+        void insert_vertex(unsigned long num, T data) {
+            if (is_vertex_in_range(num)) {
+                if (vertices[num] == nullptr) {
+                    auto vertex = new Vertex<T>;
+                    vertex->num = num;
+                    vertex->data = data;
 
-            if (check_vertex(num)) {
-                auto edge = vertices[num];
-                while (edge != nullptr) {
-                    neighbors.push_back(edge);
-                    edge = edge->next;
+                    vertices[num] = vertex;
                 }
+            }
+        }
+
+        void remove_vertex(unsigned long num) {
+            if (is_vertex_in_range(num)) {
+                std::vector<unsigned long> keys{};
+                auto edges = vertices[num];
+                while (edges != nullptr) {
+                    if (edges->num != num) {
+                        keys.push_back(edges->num);
+                    }
+
+                    auto e = edges;
+                    edges = edges->next;
+                    delete e;
+                }
+                vertices[num] = nullptr;
+
+                for (auto key: keys) {
+                    auto temp = vertices[key]->next;
+                    Vertex<T> *save = vertices[key];
+                    while (temp != nullptr) {
+                        if (temp->num == num) {
+                            auto e = temp;
+                            save->next = temp->next;
+                            delete e;
+                            edgeNum--;
+
+                            break;
+                        }
+
+                        save = temp;
+                        temp = temp->next;
+                    }
+                }
+            }
+        }
+
+        auto vertex_neighbors(unsigned long num) {
+            std::vector<Vertex<T> *> neighbors{};
+
+            if (is_vertex_in_range(num)) {
+                auto edges = vertices[num];
+                if (edges != nullptr) {
+                    auto temp = edges->next;
+                    while (temp != nullptr) {
+                        neighbors.push_back(temp);
+                        temp = temp->next;
+                    }
+                }
+
             }
 
             return neighbors;
         }
 
+        bool is_vertex_exist(unsigned long num) {
+            if (is_vertex_in_range(num) && vertices[num] != nullptr) {
+                return true;
+            }
+            return false;
+        }
+
         auto is_edge_exist(unsigned long num1, unsigned long num2) {
-            if (check_vertex_pair(num1, num2) && edgeNum > 0) {
+            if (verify_vertex_pair(num1, num2) && edgeNum > 0) {
                 auto edgesOne = vertices[num1];
                 while (edgesOne != nullptr) {
                     if (edgesOne->num == num2) {
@@ -101,7 +162,7 @@ namespace Ex::AdjacencyList {
         }
 
         auto get_vertexMaxNum() {
-            return vertexMaxNum;
+            return vertexMaxNum - 1;
         }
 
         auto get_edgeNum() {
@@ -109,64 +170,83 @@ namespace Ex::AdjacencyList {
         }
 
     private:
-        bool check_vertex(unsigned long num) {
+        bool is_vertex_in_range(unsigned long num) {
             return num < vertexMaxNum;
         }
 
-        bool check_vertex_pair(unsigned long num1, unsigned long num2) {
-            return check_vertex(num1) && check_vertex(num2);
+        bool verify_vertex_pair(unsigned long num1, unsigned long num2) {
+            return is_vertex_in_range(num1) && is_vertex_in_range(num2);
         }
 
-        bool insert_direction(unsigned long num1, unsigned long num2, unsigned long weight) {
-            auto vertex = new Vertex;
-            vertex->num = num2;
-            vertex->weight = weight;
-            auto exist = false;
+        bool insert_direction(
+            unsigned long num1, T data1, unsigned long num2, T data2,
+            unsigned long weight
+        ) {
             if (vertices[num1] == nullptr) {
-                vertices[num1] = vertex;
-            } else {
-                auto edges = vertices[num1];
-                while (edges->next != nullptr) {
-                    if (edges->num == num2) {
-                        exist = true;
-                        delete vertex;
-                        break;
-                    }
-                    edges = edges->next;
+                auto vertex1 = new Vertex<T>;
+                vertex1->num = num1;
+                vertex1->data = data1;
+
+                vertices[num1] = vertex1;
+            }
+
+            bool exist = false;
+            auto edges = vertices[num1]->next;
+            Vertex<T> *save = vertices[num1];
+            while (edges != nullptr) {
+                if (edges->num == num2) {
+                    exist = true;
+                    break;
                 }
-                if (!exist) {
-                    edges->next = vertex;
+
+                save = edges;
+                edges = edges->next;
+            }
+
+            if (!exist) {
+                auto vertex2 = new Vertex<T>;
+                if (vertices[num2] != nullptr) {
+                    vertex2->num = num2;
+                    vertex2->weight = weight;
+                    vertex2->data = vertices[num2]->data;
+                } else {
+                    vertex2->num = num2;
+                    vertex2->weight = weight;
+                    vertex2->data = data2;
                 }
+
+                save->next = vertex2;
             }
 
             return exist;
         }
 
         bool remove_direction(unsigned long num1, unsigned long num2) {
-            auto edges = vertices[num1];
-            auto exist = false;
-            if (edges->num == num2) {
-                vertices[num1] = edges->next;
-                delete edges;
-                exist = true;
-            } else {
-                auto save = edges;
-                while (edges != nullptr) {
-                    if (edges->num == num2) {
-                        save->next = edges->next;
-                        delete edges;
-                        exist = true;
-                        break;
+            bool result = false;
+            if (edgeNum > 0 && verify_vertex_pair(num1, num2)) {
+
+                auto edges = vertices[num1];
+                if (edges != nullptr) {
+                    auto save = edges;
+                    while (edges != nullptr) {
+                        if (edges->num == num2) {
+                            save->next = edges->next;
+                            delete edges;
+
+                            result = true;
+                            break;
+                        }
+                        save = edges;
+                        edges = edges->next;
                     }
-                    save = edges;
-                    edges = edges->next;
                 }
+
             }
 
-            return exist;
+            return result;
         }
 
-        Vertex **vertices;
+        Vertex<T> **vertices;
         unsigned long vertexMaxNum;
         unsigned long edgeNum;
     };
