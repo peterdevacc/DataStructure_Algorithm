@@ -13,6 +13,7 @@
 #include "graph/core_graph.h"
 #include "sort/core_sort.h"
 #include "dynamic/core_dynamic.h"
+#include "search/core_search.h"
 
 int main() {
     Ex::test_array();
@@ -25,5 +26,6 @@ int main() {
     Ex::test_graph();
     Ex::test_sorting();
     Ex::test_dynamic();
+    Ex::test_search();
     return 0;
 }

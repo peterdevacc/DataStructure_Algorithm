@@ -79,6 +79,11 @@
   - top down
   - bottom up
 
+### search 搜索
+
+- breadth first search
+- depth first search
+
 ## License
 
 Data Structure and Algorithm is distributed under the terms of the GNU GENERAL PUBLIC LICENSE (Version 3). See [LICENSE](LICENSE) for details.
